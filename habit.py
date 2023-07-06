@@ -26,11 +26,11 @@ class Habit:
         :param habit_id: The ID of the habit to be loaded into this habit object
         """
         habit_data = self.db_connect.load_habit(habit_id)
-        if habit_data != "Empty":
+        if habit_data[0] != "Empty":
             self.habit_id = habit_data[0]
             self.name = habit_data[1]
             self.periodicity = habit_data[2]
-            self.created = habit_data[3]
+            self.created = datetime.strptime(habit_data[3], '%Y-%m-%d %H:%M:%S.%f')
 
     def delete(self):
 

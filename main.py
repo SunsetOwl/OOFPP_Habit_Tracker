@@ -1,7 +1,7 @@
 import tkinter as tk
 from datetime import datetime, timedelta
 from habit import Habit
-from connector import DatabaseConnector
+from database_connector import DatabaseConnector
 
 window = tk.Tk()
 frame = tk.Frame(master=window, width=500, height=800)

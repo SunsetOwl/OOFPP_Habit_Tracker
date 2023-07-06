@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 
 class DatabaseConnector:
@@ -63,7 +64,6 @@ class DatabaseConnector:
 
         query = "SELECT COUNT(*) FROM {table}".format(table=table_name)
         count = self.cur.execute(query).fetchone()[0]
-        print(count, "Entries in the", table_name, "Table")  # TODO Remove
         return count == 0
 
     def _check_if_in_table(self, table_name, habit_id):
@@ -90,8 +90,7 @@ class DatabaseConnector:
             query = "SELECT * FROM habits WHERE habit_id=?"
             habit_data = self.cur.execute(query, (habit_id,)).fetchone()
         else:
-            habit_data = "Empty"
-            print("ID", habit_id, "not found in the Habits table.")  # TODO Remove
+            habit_data = ("Empty", 0, 0, 0)
         return habit_data
 
     def delete_habit(self, habit_id):
@@ -104,18 +103,23 @@ class DatabaseConnector:
             query = "DELETE FROM habits WHERE habit_id=?"
             self.cur.execute(query, (habit_id,))
             self.db.commit()
-        else:
-            print("ID", habit_id, "not found in the Habits table.")  # TODO Remove
+
+    def get_all_habits(self):
+        query = "SELECT * FROM habits"
+        all_habits = self.cur.execute(query).fetchall()
+        return all_habits
 
     def latest_check(self, habit_id):
         """
 
         """
-        # TODO check if empty for first check, if yes, return 1970
-        query = "SELECT MAX(check_date) FROM checks WHERE habit_id=?"
-        check_data = self.cur.execute(query, (habit_id,)).fetchall()[0]
-        check_date = check_data[0]  # TODO Adjust to right index
-        return check_date
+        if self._check_if_in_table("checks", habit_id):
+            query = "SELECT MAX(check_date) FROM checks WHERE habit_id=?"
+            check_data = self.cur.execute(query, (habit_id,)).fetchall()[0]
+            check_date = check_data[1]  # TODO Adjust to right index
+            return datetime.strptime(check_date, '%Y-%m-%d %H:%M:%S.%f')
+        else:
+            return datetime(2000, 1, 1, 0, 0, 0)
 
     def save_check(self, habit_id, when):
         """
@@ -124,4 +128,3 @@ class DatabaseConnector:
         query = "INSERT INTO checks VALUES (?, ?)"
         self.cur.execute(query, (habit_id, when))
         self.db.commit()
-
