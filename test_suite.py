@@ -1,4 +1,5 @@
 from habit import Habit
+from streak import Streak
 from database_connector import DatabaseConnector
 from datetime import datetime, timedelta
 
@@ -41,7 +42,7 @@ class TestHabit:
         habit_a = Habit(self.test_db)
         habit_a.new_habit()
 
-        assert self.test_db.latest_check(habit_a.habit_id) == datetime(2000, 1, 1, 0, 0, 0)
+        assert self.test_db.latest_check(habit_a.habit_id) == datetime(2000, 1, 1)
 
     def test_perform_a_habit_then_return_saved_and_latest_check_is_in_database(self):
         habit_a = Habit(self.test_db)
@@ -59,6 +60,25 @@ class TestHabit:
 
         assert result_one == "Saved"
         assert result_two == "Too Early"
+
+    def test_a_check_that_will_or_will_not_break_the_streak_then_streak_check_returns_true_or_false(self):
+        streak = Streak(1, 7, datetime(2023, 1, 1))
+
+        assert streak.check_continues_streak(datetime(2023, 1, 8))
+        assert not streak.check_continues_streak(datetime(2023, 1, 10))
+
+    def test_add_a_check_that_will_continue_the_streak_then_streak_is_ongoing(self):
+        streak = Streak(1, 7, datetime(2023, 1, 1))
+        streak.add_check(datetime(2023, 1, 5))
+
+        assert streak.ongoing
+        assert streak.length() == 5
+
+    def test_add_a_check_that_will_not_continue_the_streak_then_streak_is_not_ongoing(self):
+        streak = Streak(1, 7, datetime(2023, 1, 1))
+        streak.add_check(datetime(2023, 1, 10))
+
+        assert not streak.ongoing
 
     def teardown_method(self):
         import os
