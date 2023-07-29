@@ -47,18 +47,26 @@ class Habit:
         Adjusts the current datetime to two hours ago to account for nightowls that finish their list at 1:30 AM.
         Fetches the last check date and compares it to the date for this check. If it's the same day, nothing it added.
         If it's at least one day later, the check is added to the database.
-        :return: final state of the function (Too Early, Saved, Connection Error)
+        :return: final state of the function as a string (Too Early, Saved)
         """
 
         state = "Saving"
         check_data = datetime.today() - timedelta(hours=2)
-        latest_check = self.db_connect.latest_check(self.habit_id)
+        latest_check = self.latest_check()
 
         if (datetime.today().day - latest_check.day) == 0:
             state = "Too Early"
 
         if state == "Saving":
             self.db_connect.save_check(self.habit_id, check_data)
+            state = "Saved"
 
         return state
 
+    def latest_check(self):
+        """
+        Fetches when this habit has last been performed from the database.
+        :return: datetime containing when it was last performed
+        """
+
+        return self.db_connect.latest_check(self.habit_id)
