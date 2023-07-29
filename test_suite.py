@@ -22,10 +22,10 @@ class TestHabit:
                (habit_b.habit_id, habit_b.name, habit_b.periodicity, habit_b.created)
 
     def test_when_habit_added_then_one_more_entry_in_database(self):
-        entries_before = len(self.test_db.get_all_habits())
+        entries_before = len(self.test_db.get_all_habit_ids())
         habit_a = Habit(self.test_db)
         habit_a.new_habit()
-        entries_after = len(self.test_db.get_all_habits())
+        entries_after = len(self.test_db.get_all_habit_ids())
 
         assert entries_before + 1 == entries_after
 

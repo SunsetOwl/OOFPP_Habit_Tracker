@@ -104,10 +104,15 @@ class DatabaseConnector:
             self.cur.execute(query, (habit_id,))
             self.db.commit()
 
-    def get_all_habits(self):
-        query = "SELECT * FROM habits"
-        all_habits = self.cur.execute(query).fetchall()
-        return all_habits
+    def get_all_habit_ids(self):
+        """
+        Loads all habitsIDs from the database and returns them for, for example, easy counting.
+        :return: A tuple containing the ids of all habits in the database.
+        """
+
+        query = "SELECT habit_id FROM habits"
+        all_habit_ids = self.cur.execute(query).fetchall()
+        return all_habit_ids
 
     def latest_check(self, habit_id):
         """
