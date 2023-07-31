@@ -58,13 +58,12 @@ btnStart = tk.Button(master=frmGreeting,
                      font=("Courier New", 15, "bold"))
 btnStart.grid(row=2, column=1, padx=10, pady=15)
 
-
-window.mainloop()
-
 db = DatabaseConnector()
-hab1 = Habit(db_connect=db, name="Tester Habit", periodicity=7)
+hab1 = Habit(db_connect=db, name="Tester Habit", periodicity=7, todo="Test something or other")
 hab1.new_habit()
 hab2 = Habit(db)
 hab2.load_data(2)
 hab2.print()
 hab2.delete()
+
+window.mainloop()
