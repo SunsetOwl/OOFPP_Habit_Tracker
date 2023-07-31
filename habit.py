@@ -50,7 +50,7 @@ class Habit:
         Adjusts the current datetime to two hours ago to account for nightowls that finish their list at 1:30 AM.
         Fetches the last check date and compares it to the date for this check. If it's the same day, nothing it added.
         If it's at least one day later, the check is added to the database.
-        :return: final state of the function (Too Early, Saved)
+        :return: final state of the function as a string (Too Early, Saved)
         """
 
         state = "Saving"
@@ -59,7 +59,7 @@ class Habit:
 
         self.db_connect.save_check(self.habit_id, check_data)
         state = "Saved"
-
+        
         if (datetime.today().day - latest_check.day) == 0:
             state = "Too Early"
 
