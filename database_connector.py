@@ -117,7 +117,9 @@ class DatabaseConnector:
 
     def latest_check(self, habit_id):
         """
-
+        Loads the latest check stored in the database for a certain habit.
+        :param habit_id: ID of the habit to be searched for
+        :return: A datetime containing the stored datetime from the database or a dummy value, if the habit isn't found.
         """
         if self._check_if_in_table("checks", habit_id):
             query = "SELECT MAX(check_time) FROM checks WHERE habit_id=?"
@@ -129,7 +131,9 @@ class DatabaseConnector:
 
     def save_check(self, habit_id, when):
         """
-
+        Saves a check of a habit to the database, meaning the habit has been performed at this time.
+        :param habit_id: ID of the habit performed
+        :param check_time: datetime of when the habit was performed
         """
         query = "INSERT INTO checks VALUES (?, ?)"
         self.cur.execute(query, (habit_id, when))
