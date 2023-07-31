@@ -128,7 +128,7 @@ class DatabaseConnector:
             check_date = check_data[0]
             return datetime.strptime(check_date, '%Y-%m-%d %H:%M:%S.%f')
         else:
-            return datetime(2000, 1, 1, 0, 0, 0)
+            return datetime(2000, 1, 1)
 
     def save_check(self, habit_id, check_time):
         """

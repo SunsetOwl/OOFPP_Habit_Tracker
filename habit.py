@@ -72,3 +72,4 @@ class Habit:
         """
 
         return self.db_connect.latest_check(self.habit_id)
+
