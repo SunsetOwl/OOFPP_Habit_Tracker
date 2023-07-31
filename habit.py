@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class Habit:
 
-    def __init__(self, db_connect, habit_id=0, name="New Habit", periodicity=1, created=datetime.today()):
+    def __init__(self, db_connect, habit_id=0, name="New Habit", periodicity=1, created=datetime.today(), todo="Fulfill a Task"):
         """
 
         :param db_connect: The DatabaseConnector object that interacts with the database this Habit belongs to.
@@ -14,10 +14,11 @@ class Habit:
         self.periodicity = periodicity
         self.created = created
         self.db_connect = db_connect
+        self.todo = todo
 
     def new_habit(self):
         """"""
-        self.habit_id = self.db_connect.new_habit(self.name, self.periodicity, self.created)
+        self.habit_id = self.db_connect.new_habit(self.name, self.periodicity, self.created, self.todo)
 
     def load_data(self, habit_id):
         """
@@ -31,6 +32,7 @@ class Habit:
             self.name = habit_data[1]
             self.periodicity = habit_data[2]
             self.created = datetime.strptime(habit_data[3], '%Y-%m-%d %H:%M:%S.%f')
+            self.todo = habit_data[4]
 
     def delete(self):
 
@@ -41,6 +43,7 @@ class Habit:
         print("Name: ", self.name)
         print("Periodicity: ", self.periodicity)
         print("Created: ", self.created)
+        print("ToDo: ", self.todo)
 
     def perform(self):
         """
@@ -57,8 +60,7 @@ class Habit:
         if (datetime.today().day - latest_check.day) == 0:
             state = "Too Early"
 
-        if state == "Saving":
-            self.db_connect.save_check(self.habit_id, check_data)
+        self.db_connect.save_check(self.habit_id, check_data)
 
         return state
 

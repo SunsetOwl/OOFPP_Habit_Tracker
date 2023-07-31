@@ -17,8 +17,9 @@ class DatabaseConnector:
         habits_query = """CREATE TABLE IF NOT EXISTS habits (
                              habit_id INTEGER PRIMARY KEY,
                              name TEXT,
-                             periodicity INETEGER,
-                             creation_date TIMESTAMP
+                             periodicity INTEGER,
+                             creation_date TIMESTAMP,
+                             todo TEXT
                              )"""
         checks_query = """CREATE TABLE IF NOT EXISTS checks (
                              habit_id INTEGER,
@@ -33,7 +34,7 @@ class DatabaseConnector:
         self.cur.execute(checks_query)
         self.db.commit()
 
-    def new_habit(self, name, periodicity, created):
+    def new_habit(self, name, periodicity, created, todo):
         """
         Adds a new habit to the habits table by entering all the provided data, then returns the newly assigned id.
         :param name: name of the habit to be set up
@@ -48,8 +49,8 @@ class DatabaseConnector:
             max_habit_query = "SELECT MAX(habit_id) FROM habits"
             habit_id = self.cur.execute(max_habit_query).fetchone()[0] + 1
 
-        habit_data = (habit_id, name, periodicity, created)
-        insert_habit_query = "INSERT INTO habits VALUES (?, ?, ?, ?)"
+        habit_data = (habit_id, name, periodicity, created, todo)
+        insert_habit_query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
         self.cur.execute(insert_habit_query, habit_data)
         self.db.commit()
 
@@ -90,7 +91,7 @@ class DatabaseConnector:
             query = "SELECT * FROM habits WHERE habit_id=?"
             habit_data = self.cur.execute(query, (habit_id,)).fetchone()
         else:
-            habit_data = ("Empty", 0, 0, 0)
+            habit_data = ("Empty", 0, 0, 0, 0)
         return habit_data
 
     def delete_habit(self, habit_id):
