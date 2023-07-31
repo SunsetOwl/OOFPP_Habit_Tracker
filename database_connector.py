@@ -120,12 +120,12 @@ class DatabaseConnector:
 
         """
         if self._check_if_in_table("checks", habit_id):
-            query = "SELECT MAX(check_date) FROM checks WHERE habit_id=?"
+            query = "SELECT MAX(check_time) FROM checks WHERE habit_id=?"
             check_data = self.cur.execute(query, (habit_id,)).fetchall()[0]
-            check_date = check_data[1]  # TODO Adjust to right index
+            check_date = check_data[0]
             return datetime.strptime(check_date, '%Y-%m-%d %H:%M:%S.%f')
         else:
-            return datetime(2000, 1, 1, 0, 0, 0)
+            return datetime(2000, 1, 1)
 
     def save_check(self, habit_id, when):
         """

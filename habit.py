@@ -57,10 +57,11 @@ class Habit:
         check_data = datetime.today() - timedelta(hours=2)
         latest_check = self.db_connect.latest_check(self.habit_id)
 
+        self.db_connect.save_check(self.habit_id, check_data)
+        state = "Saved"
+
         if (datetime.today().day - latest_check.day) == 0:
             state = "Too Early"
-
-        self.db_connect.save_check(self.habit_id, check_data)
 
         return state
 
