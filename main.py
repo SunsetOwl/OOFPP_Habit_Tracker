@@ -68,3 +68,4 @@ hab2 = Habit(db)
 hab2.load_data(2)
 hab2.print()
 hab2.delete()
+
