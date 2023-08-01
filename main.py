@@ -1,5 +1,4 @@
 import tkinter as tk
-from datetime import datetime, timedelta
 from habit import Habit
 from database_connector import DatabaseConnector
 import habit_analytics as hana
