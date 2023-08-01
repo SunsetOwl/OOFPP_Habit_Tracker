@@ -1,5 +1,6 @@
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timedelta
+import pandas as pd
 
 
 class DatabaseConnector:
@@ -140,3 +141,40 @@ class DatabaseConnector:
         query = "INSERT INTO checks VALUES (?, ?)"
         self.cur.execute(query, (habit_id, check_time))
         self.db.commit()
+
+    def load_dummy(self):
+        """
+
+        :return:
+        """
+
+        habits_data = pd.read_csv('testdata_habits.csv', sep=';')
+
+        # Technically .to_sql would be better here, but because the habit tracker is better tested with running streaks,
+        # some calculations need to be made on the data saved in the .csv files before importing into the database.
+
+        for index, row in habits_data.iterrows():
+            date_to_save = datetime.today() - timedelta(days=row["days_ago"])
+            time_to_save = datetime.strptime(row["time"], "%H:%M:%S")
+            date_to_save = date_to_save.replace(hour=time_to_save.hour,
+                                                minute=time_to_save.minute,
+                                                second=time_to_save.second)
+            query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
+            self.cur.execute(query, (row["habit_id"], row["name"], row["periodicity"], date_to_save, row["todo"]))
+
+        self.db.commit()
+
+        checks_data = pd.read_csv('testdata_checks.csv', sep=';')
+
+        for index, row in checks_data.iterrows():
+            date_to_save = datetime.today() - timedelta(days=row["days_ago"])
+            time_to_save = datetime.strptime(row["time"], "%H:%M:%S")
+            date_to_save = date_to_save.replace(hour=time_to_save.hour,
+                                                minute=time_to_save.minute,
+                                                second=time_to_save.second)
+            query = "INSERT INTO checks VALUES (?, ?)"
+            self.cur.execute(query, (row["habit_id"], date_to_save))
+
+        self.db.commit()
+
+

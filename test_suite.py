@@ -10,8 +10,19 @@ class TestHabit:
         self.empty_db = DatabaseConnector("test_empty_database.db")
         self.test_db = DatabaseConnector("test_database.db")
 
+        self.test_db.load_dummy()
+
+    def test_dummy_habit_data_loaded_correctly_in_setup(self):
         habit_a = Habit(self.test_db)
-        habit_a.new_habit()
+        habit_a.load_data(1)
+
+        assert habit_a.created.day == (datetime.today()-timedelta(days=63)).day
+
+    def test_dummy_checks_data_loaded_correctly_in_setup(self):
+        habit_a = Habit(self.test_db)
+        habit_a.load_data(1)
+
+        assert habit_a.latest_check().hour == 21
 
     def test_when_habit_added_then_habit_loadable_from_database(self):
         habit_a = Habit(self.test_db)
@@ -19,8 +30,8 @@ class TestHabit:
         habit_b = Habit(self.test_db)
         habit_b.load_data(habit_a.habit_id)
 
-        assert (habit_a.habit_id, habit_a.name, habit_a.periodicity, habit_a.created) == \
-               (habit_b.habit_id, habit_b.name, habit_b.periodicity, habit_b.created)
+        assert (habit_a.habit_id, habit_a.name, habit_a.periodicity, habit_a.created, habit_a.todo) == \
+               (habit_b.habit_id, habit_b.name, habit_b.periodicity, habit_b.created, habit_b.todo)
 
     def test_when_habit_added_then_one_more_entry_in_database(self):
         entries_before = len(self.test_db.get_all_habit_ids())
@@ -46,7 +57,7 @@ class TestHabit:
 
     def test_perform_a_habit_then_return_saved_and_latest_check_is_in_database(self):
         habit_a = Habit(self.test_db)
-        habit_a.new_habit()
+        habit_a.load_data(1)
         result = habit_a.perform()
 
         assert result == "Saved"
@@ -54,7 +65,7 @@ class TestHabit:
 
     def test_perform_a_habit_that_has_been_performed_today_then_return_too_early(self):
         habit_a = Habit(self.test_db)
-        habit_a.new_habit()
+        habit_a.load_data(1)
         result_one = habit_a.perform()
         result_two = habit_a.perform()
 

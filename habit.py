@@ -47,14 +47,18 @@ class Habit:
 
     def perform(self):
         """
-        Adjusts the current datetime to two hours ago to account for nightowls that finish their list at 1:30 AM.
-        Fetches the last check date and compares it to the date for this check. If it's the same day, nothing it added.
+        Adjusts the current datetime to two hours ago to account for nightowls that finish their list at 1:30 AM,
+        which means that technically all timestamps for completions are "mistimed" by two hours in the database.
+        Fetches the last check date and compares it to the date for this check. If it's the same day, nothing is added.
         If it's at least one day later, the check is added to the database.
         :return: final state of the function as a string (Too Early, Saved)
         """
 
         state = "Saving"
-        check_data = datetime.today() - timedelta(hours=2)
+        if (datetime.today() - self.created).seconds < 2*60*60:  # Ensure no check is saved before the creation time
+            check_data = datetime.today()
+        else:
+            check_data = datetime.today() - timedelta(hours=2)
         latest_check = self.latest_check()
 
         self.db_connect.save_check(self.habit_id, check_data)
