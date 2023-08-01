@@ -114,7 +114,32 @@ class DatabaseConnector:
 
         query = "SELECT habit_id FROM habits"
         all_habit_ids = self.cur.execute(query).fetchall()
-        return all_habit_ids
+        return [habit[0] for habit in all_habit_ids]
+
+    def get_all_habits_of_periodicity(self, periodicity):
+        """
+        Loads all habitsIDs of matching periodicity from the database and returns them.
+        :return: A tuple containing the ids of all selected habits.
+        """
+
+        query = "SELECT habit_id FROM habits WHERE periodicity == ?"
+        habit_ids = self.cur.execute(query, (periodicity,)).fetchall()
+        return [habit[0] for habit in habit_ids]
+
+    def get_habits_in_list(self, habit_ids):
+        """
+        Loads all habitsIDs of matching periodicity from the database and returns them.
+        :return: A tuple containing the ids of all selected habits.
+        """
+        id_list = "("
+        for habit_id in habit_ids:
+            if id_list != "(":
+                id_list += ", "
+            id_list += str(habit_id)
+        id_list += ")"
+        query = "SELECT * FROM habits WHERE habit_id IN " + id_list
+        habits = self.cur.execute(query).fetchall()
+        return habits
 
     def latest_check(self, habit_id):
         """

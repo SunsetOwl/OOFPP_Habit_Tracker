@@ -2,11 +2,12 @@ import tkinter as tk
 from datetime import datetime, timedelta
 from habit import Habit
 from database_connector import DatabaseConnector
+import habit_analytics as hana
 
 
 def load_dummy():
-    db.load_dummy()
-    hab = Habit(db)
+    db_connect.load_dummy()
+    hab = Habit(db_connect)
     hab.load_data(4)
     hab.print()
     print(hab.latest_check())
@@ -14,6 +15,8 @@ def load_dummy():
     print(hab.latest_check())
     print(hab.perform())
     print(hab.latest_check())
+    hana.list_all_habits(db_connect)
+    hana.list_habits_with_periodicity(db_connect, 1)
 
 
 colors = {"highlight": "#B6D274",
@@ -72,7 +75,7 @@ btn_start_new = tk.Button(master=frm_greeting,
                           font=("Courier New", 15, "bold"))
 btn_start_new.grid(row=2, column=1, padx=10, pady=15)
 
-db = DatabaseConnector()
+db_connect = DatabaseConnector()
 
 window.mainloop()
 
@@ -80,7 +83,7 @@ window.mainloop()
 # TODO Yeet
 import os
 
-db.cur.close()
-db.db.close()
+db_connect.cur.close()
+db_connect.db.close()
 
 os.remove("habit-tracker-database.db")
