@@ -116,9 +116,6 @@ window.mainloop()
 
 
 # TODO Yeet
-import os
 
-db_connect.cur.close()
-db_connect.db.close()
+db_connect.delete_database()
 
-os.remove("habit-tracker-database.db")

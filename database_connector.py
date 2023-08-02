@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
+import os
 
 
 class DatabaseConnector:
@@ -12,12 +13,13 @@ class DatabaseConnector:
         after which it initializes all required tables, if they haven't been previously set up.
         :param name: name of the database file, default: "habit-tracker-database.db", testing default: "test.db"
         """
+        self.name = name
         self.db = sqlite3.connect(name)
         self.cur = self.db.cursor()
 
         habits_query = """CREATE TABLE IF NOT EXISTS habits (
                              habit_id INTEGER PRIMARY KEY,
-                             name TEXT,
+                             name CHAR(30),
                              periodicity INTEGER,
                              creation_date TIMESTAMP,
                              todo TEXT
@@ -202,4 +204,8 @@ class DatabaseConnector:
 
         self.db.commit()
 
+    def delete_database(self):
+        self.cur.close()
+        self.db.close()
 
+        os.remove(self.name)

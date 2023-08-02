@@ -92,12 +92,6 @@ class TestHabit:
         assert not streak.ongoing
 
     def teardown_method(self):
-        import os
+        self.test_db.delete_database()
+        self.empty_db.delete_database()
 
-        self.test_db.cur.close()
-        self.test_db.db.close()
-        self.empty_db.cur.close()
-        self.empty_db.db.close()
-
-        os.remove("test_database.db")
-        os.remove("test_empty_database.db")
