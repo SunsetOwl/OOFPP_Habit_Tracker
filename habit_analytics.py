@@ -35,10 +35,12 @@ def calculate_streaks(db_connect, habit_id):
 
     habit = Habit(db_connect)
     habit.load_data(habit_id)
-    print(habit.latest_check())
     all_checks = db_connect.load_all_checks(habit_id)
     streaks = []
     streak_count = 0
+
+    if all_checks == datetime(2000, 1, 1):
+        return 0
 
     for check_time in all_checks:
         if streaks == [] or len(streaks) == streak_count:
@@ -56,9 +58,11 @@ def calculate_streaks(db_connect, habit_id):
 def current_streak_length(db_connect, habit_id):
 
     streaks = calculate_streaks(db_connect, habit_id)
+
+    if streaks == 0:
+        return 0
+
     s = streaks[-1]
-    print("ended", s.ended)
-    print("len", s.length())
 
     if not s.ongoing or not s.check_continues_streak(datetime.today()):
         return 0

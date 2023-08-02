@@ -9,13 +9,6 @@ class MainMenu(tk.Frame):
     def __init__(self, window, db_connect):
         tk.Frame.__init__(self, window, background=colors["background"])
 
-        habit_list = hana.list_all_habits(db_connect)
-        list_string = ""
-        for habit in habit_list:
-            if list_string != "":
-                list_string += "\n"
-            list_string += habit
-
         lbl_mm_title = tk.Label(text="~ Your Patch ~",
                                 foreground=colors["dark"],
                                 background=colors["background"],
@@ -24,14 +17,64 @@ class MainMenu(tk.Frame):
                                 )
         lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=3)
 
-        lbl_mm_habits = tk.Label(text=list_string,
-                                 foreground=colors["dark"],
-                                 background=colors["background"],
-                                 font=("Courier New", 13),
-                                 pady=15,
-                                 master=self
+        habit_list = hana.list_all_habits(db_connect)
+        habit_ids = db_connect.get_all_habit_ids()
+        list_string = ""
+        streaks_string = ""
+        for i in range(len(habit_list)):
+            if list_string != "":
+                list_string += "\n"
+                streaks_string += "\n"
+            list_string += habit_list[i]
+            streaks_string += str(hana.current_streak_length(db_connect, habit_ids[i]))
+
+        habit_labels = []
+        streak_labels = []
+        perform_buttons = []
+
+        for i in range(len(habit_list)):
+            print(habit_ids[i])
+            habit_labels.append(tk.Label(text=habit_list[i],
+                                         foreground=colors["dark"],
+                                         background=colors["background"],
+                                         font=("Courier New", 13),
+                                         pady=15,
+                                         master=self
+                                         )
+                                )
+            habit_labels[i].grid(row=i + 1, pady=0, padx=15, column=0)
+            streak_labels.append(tk.Label(text=str(hana.current_streak_length(db_connect, habit_ids[i])),
+                                          foreground=colors["dark"],
+                                          background=colors["background"],
+                                          font=("Courier New", 13),
+                                          pady=15,
+                                          master=self
+                                          )
                                  )
-        lbl_mm_habits.grid(row=1, pady=10, padx=15, column=0)
+            streak_labels[i].grid(row=i + 1, pady=0, padx=15, column=1)
+            perform_buttons.append(tk.Button(master=self,
+                                             text="Water",
+                                             background=colors["highlight"],
+                                             foreground=colors["light"],
+                                             activebackground=colors["highlight"],
+                                             activeforeground=colors["light"],
+                                             font=("Courier New", 15, "bold"),
+                                             command=lambda i=i: perform_habit_button(habit_ids[i])
+                                             )
+                                   )
+            perform_buttons[i].grid(row=i + 1, pady=0, padx=15, column=2)
+
+        if len(habit_ids) == 5:
+            grow_button = tk.Button(master=self,
+                                    text="Add habit",
+                                    background=colors["highlight"],
+                                    foreground=colors["light"],
+                                    activebackground=colors["highlight"],
+                                    activeforeground=colors["light"],
+                                    font=("Courier New", 15, "bold"),
+                                    command=lambda: add_dummy()
+                                    )
+            grow_button.grid(row=1 + len(habit_list), pady=20, padx=15, columnspan=3)
 
 
 def load_dummy():
@@ -39,15 +82,34 @@ def load_dummy():
     hab = Habit(db_connect)
     hab.load_data(4)
     hab.print()
-    print(hab.latest_check())
-    print(hab.perform())
-    print(hab.latest_check())
-    print(hab.perform())
-    print(hab.latest_check())
     hana.list_all_habits(db_connect)
     hana.list_habits_with_periodicity(db_connect, 1)
     for i in (1, 2, 4, 6, 7):
         print(str(hana.current_streak_length(db_connect, i)))
+
+    frm_main_menu = MainMenu(window, db_connect)
+
+    frm_main_menu.grid(row=0, column=0, sticky="nsew")
+    frm_main_menu.tkraise()
+
+
+def perform_habit_button(habit_id):
+    print("id", habit_id)
+    hab = Habit(db_connect)
+    hab.load_data(habit_id)
+    print(hab.latest_check())
+    hab.perform()
+    print(hab.latest_check())
+
+    frm_main_menu = MainMenu(window, db_connect)
+
+    frm_main_menu.grid(row=0, column=0, sticky="nsew")
+    frm_main_menu.tkraise()
+
+
+def add_dummy():
+    hab = Habit(db_connect, name="Water the Garden", periodicity=7, todo="Make sure to water all plants in the garden")
+    hab.new_habit()
 
     frm_main_menu = MainMenu(window, db_connect)
 
@@ -116,8 +178,6 @@ db_connect = DatabaseConnector()
 
 window.mainloop()
 
-
 # TODO Yeet
 
 db_connect.delete_database()
-
