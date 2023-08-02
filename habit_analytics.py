@@ -10,6 +10,7 @@ from habit import Habit
 from database_connector import DatabaseConnector
 from streak import Streak
 
+
 def list_all_habits(db_connect):
 
     habit_ids = db_connect.get_all_habit_ids()
@@ -18,6 +19,7 @@ def list_all_habits(db_connect):
     print(habit_names)
 
     return habit_names
+
 
 def list_habits_with_periodicity(db_connect, periodicity):
 

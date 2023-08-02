@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class Habit:
 
-    def __init__(self, db_connect, habit_id=0, name="New Habit", periodicity=1, created=datetime.today(), todo="Fulfill a Task"):
+    def __init__(self, db_connect, habit_id=0, name="New", periodicity=1, created=datetime.today(), todo="Do the Task"):
         """
 
         :param db_connect: The DatabaseConnector object that interacts with the database this Habit belongs to.
