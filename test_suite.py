@@ -24,6 +24,17 @@ class TestHabit:
 
         assert habit_a.latest_check().hour == 21
 
+    def test_deleting_the_database_and_reloading_a_dummy_dataset_in_the_reset_database_works(self):
+        self.test_db.delete_database()
+        self.test_db = DatabaseConnector("test_database.db")
+
+        self.test_db.load_dummy()
+
+        habit_a = Habit(self.test_db)
+        habit_a.load_data(1)
+
+        assert habit_a.latest_check().hour == 21
+
     def test_when_habit_added_then_habit_loadable_from_database(self):
         habit_a = Habit(self.test_db)
         habit_a.new_habit()
@@ -94,4 +105,3 @@ class TestHabit:
     def teardown_method(self):
         self.test_db.delete_database()
         self.empty_db.delete_database()
-
