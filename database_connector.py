@@ -169,6 +169,15 @@ class DatabaseConnector:
         self.cur.execute(query, (habit_id, check_time))
         self.db.commit()
 
+    def load_all_checks(self, habit_id):
+
+        if self._check_if_in_table("checks", habit_id):
+            query = "SELECT check_time FROM checks WHERE habit_id=?"
+            check_data = self.cur.execute(query, (habit_id,)).fetchall()
+            return [datetime.strptime(str(check[0]), '%Y-%m-%d %H:%M:%S.%f') for check in check_data]
+        else:
+            return datetime(2000, 1, 1)
+
     def load_dummy(self):
         """
 

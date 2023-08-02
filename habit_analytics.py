@@ -29,3 +29,39 @@ def list_habits_with_periodicity(db_connect, periodicity):
     print(habit_names)
 
     return habit_names
+
+
+def calculate_streaks(db_connect, habit_id):
+
+    habit = Habit(db_connect)
+    habit.load_data(habit_id)
+    print(habit.latest_check())
+    all_checks = db_connect.load_all_checks(habit_id)
+    streaks = []
+    streak_count = 0
+
+    for check_time in all_checks:
+        if streaks == [] or len(streaks) == streak_count:
+            streaks.append(Streak(habit_id, habit.periodicity, check_time))
+        else:
+            s = streaks[streak_count]
+            ongoing = s.add_check(check_time)
+            streaks[streak_count] = s
+            if not ongoing:
+                streak_count += 1
+
+    return streaks
+
+
+def current_streak_length(db_connect, habit_id):
+
+    streaks = calculate_streaks(db_connect, habit_id)
+    s = streaks[-1]
+    print("ended", s.ended)
+    print("len", s.length())
+
+    if not s.ongoing or not s.check_continues_streak(datetime.today()):
+        return 0
+    else:
+        return s.length()
+

@@ -39,11 +39,14 @@ class Streak:
         """
         Prolongs the streak by the given date, if the streak can be prolonged with it, otherwise ends it.
         :param check_time: The check to be added to the streak
+        :return: Boolean of whether the check continued (True) or broke the streak (False)
         """
         if not self.ongoing:
             return
 
         if self.check_continues_streak(check_time):
             self.ended = check_time
+            return True
         else:
             self.ongoing = False
+            return False

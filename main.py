@@ -46,6 +46,8 @@ def load_dummy():
     print(hab.latest_check())
     hana.list_all_habits(db_connect)
     hana.list_habits_with_periodicity(db_connect, 1)
+    for i in (1, 2, 4, 6, 7):
+        print(str(hana.current_streak_length(db_connect, i)))
 
     frm_main_menu = MainMenu(window, db_connect)
 
