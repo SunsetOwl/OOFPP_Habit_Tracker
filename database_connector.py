@@ -13,6 +13,7 @@ class DatabaseConnector:
         after which it initializes all required tables, if they haven't been previously set up.
         :param name: name of the database file, default: "habit-tracker-database.db", testing default: "test.db"
         """
+
         self.name = name
         self.db = sqlite3.connect(name)
         self.cur = self.db.cursor()
@@ -37,27 +38,46 @@ class DatabaseConnector:
         self.cur.execute(checks_query)
         self.db.commit()
 
-    def new_habit(self, name, periodicity, created, todo):
+    def delete_database(self):
         """
-        Adds a new habit to the habits table by entering all the provided data, then returns the newly assigned id.
-        :param name: name of the habit to be set up
-        :param periodicity: how many days there are to be in between habit checks
-        :param created: timestamp of creation of the habit
-        :return: The assigned id of the habit
+        Fully deletes the database, including its .db file.
         """
 
-        if self._check_if_empty("habits"):
-            habit_id = 0
-        else:
-            max_habit_query = "SELECT MAX(habit_id) FROM habits"
-            habit_id = self.cur.execute(max_habit_query).fetchone()[0] + 1
+        self.cur.close()
+        self.db.close()
 
-        habit_data = (habit_id, name, periodicity, created, todo)
-        insert_habit_query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
-        self.cur.execute(insert_habit_query, habit_data)
+        os.remove(self.name)
+
+    def insert_dummy(self):
+        """
+        Loads the dummy dataset provided in the two .csv files into the database.
+        Note: Instead of importing the data simply via the to_sql function included in pandas,
+        some calculations are performed on the dates to make the dataset current.
+        """
+
+        habits_data = pd.read_csv('testdata_habits.csv', sep=';')
+
+        for index, row in habits_data.iterrows():
+            date_to_save = datetime.today() - timedelta(days=row["days_ago"])
+            time_to_save = datetime.strptime(row["time"], "%H:%M:%S")
+            date_to_save = date_to_save.replace(hour=time_to_save.hour,
+                                                minute=time_to_save.minute,
+                                                second=time_to_save.second)
+            query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
+            self.cur.execute(query, (row["habit_id"], row["name"], row["periodicity"], date_to_save, row["todo"]))
+
+        checks_data = pd.read_csv('testdata_checks.csv', sep=';')
+
+        for index, row in checks_data.iterrows():
+            date_to_save = datetime.today() - timedelta(days=row["days_ago"])
+            time_to_save = datetime.strptime(row["time"], "%H:%M:%S")
+            date_to_save = date_to_save.replace(hour=time_to_save.hour,
+                                                minute=time_to_save.minute,
+                                                second=time_to_save.second)
+            query = "INSERT INTO checks VALUES (?, ?)"
+            self.cur.execute(query, (row["habit_id"], date_to_save))
+
         self.db.commit()
-
-        return habit_id
 
     def _check_if_empty(self, table_name):
         """
@@ -81,6 +101,29 @@ class DatabaseConnector:
         query = "SELECT COUNT(*) FROM {table} WHERE habit_id={id}".format(table=table_name, id=habit_id)
         count = self.cur.execute(query).fetchone()[0]
         return count != 0
+
+    def new_habit(self, name, periodicity, created, todo):
+        """
+        Adds a new habit to the habits table by entering all the provided data, then returns the newly assigned id.
+        :param name: The name of the habit.
+        :param periodicity: Integer indicating after how many days a habit needs to be re-performed to retain a streak.
+        :param created: Saves the exact time and date of when the habit was set up.
+        :param todo: Contains a more detailed description of the habit.
+        :return: The assigned id of the habit
+        """
+
+        if self._check_if_empty("habits"):
+            habit_id = 0
+        else:
+            max_habit_query = "SELECT MAX(habit_id) FROM habits"
+            habit_id = self.cur.execute(max_habit_query).fetchone()[0] + 1
+
+        habit_data = (habit_id, name, periodicity, created, todo)
+        insert_habit_query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
+        self.cur.execute(insert_habit_query, habit_data)
+        self.db.commit()
+
+        return habit_id
 
     def load_habit(self, habit_id):
         """
@@ -108,7 +151,7 @@ class DatabaseConnector:
             self.cur.execute(query, (habit_id,))
             self.db.commit()
 
-    def get_all_habit_ids(self):
+    def load_all_habit_ids(self):
         """
         Loads all habitsIDs from the database and returns them for, for example, easy counting.
         :return: A tuple containing the ids of all habits in the database.
@@ -118,9 +161,10 @@ class DatabaseConnector:
         all_habit_ids = self.cur.execute(query).fetchall()
         return [habit[0] for habit in all_habit_ids]
 
-    def get_all_habits_of_periodicity(self, periodicity):
+    def load_all_habits_of_periodicity(self, periodicity):
         """
         Loads all habitsIDs of matching periodicity from the database and returns them.
+        :param periodicity: The periodicity to be checked for.
         :return: A tuple containing the ids of all selected habits.
         """
 
@@ -128,11 +172,13 @@ class DatabaseConnector:
         habit_ids = self.cur.execute(query, (periodicity,)).fetchall()
         return [habit[0] for habit in habit_ids]
 
-    def get_habits_in_list(self, habit_ids):
+    def load_habits_in_list(self, habit_ids):
         """
-        Loads all habitsIDs of matching periodicity from the database and returns them.
-        :return: A tuple containing the ids of all selected habits.
+        Loads the habit data of a set list of ids.
+        :param habit_ids: List containing all requested habit ids.
+        :return: A nested tuple containing the habit data.
         """
+
         id_list = "("
         for habit_id in habit_ids:
             if id_list != "(":
@@ -142,21 +188,6 @@ class DatabaseConnector:
         query = "SELECT * FROM habits WHERE habit_id IN " + id_list
         habits = self.cur.execute(query).fetchall()
         return habits
-
-    def latest_check(self, habit_id):
-        """
-        Loads the latest check stored in the database for a certain habit.
-        :param habit_id: ID of the habit to be searched for
-        :return: A datetime containing the stored datetime from the database or a dummy value, if the habit isn't found.
-        """
-
-        if self._check_if_in_table("checks", habit_id):
-            query = "SELECT MAX(check_time) FROM checks WHERE habit_id=?"
-            check_data = self.cur.execute(query, (habit_id,)).fetchall()[0]
-            check_date = check_data[0]
-            return datetime.strptime(check_date, '%Y-%m-%d %H:%M:%S.%f')
-        else:
-            return datetime(2000, 1, 1)
 
     def save_check(self, habit_id, check_time):
         """
@@ -169,7 +200,27 @@ class DatabaseConnector:
         self.cur.execute(query, (habit_id, check_time))
         self.db.commit()
 
+    def load_latest_check(self, habit_id):
+        """
+        Loads the latest check stored in the database for a certain habit.
+        :param habit_id: ID of the habit to be searched for
+        :return: A datetime containing the last time the habit has been performed (01.01.2000 if it hasn't yet)
+        """
+
+        if self._check_if_in_table("checks", habit_id):
+            query = "SELECT MAX(check_time) FROM checks WHERE habit_id=?"
+            check_data = self.cur.execute(query, (habit_id,)).fetchall()[0]
+            check_date = check_data[0]
+            return datetime.strptime(check_date, '%Y-%m-%d %H:%M:%S.%f')
+        else:
+            return datetime(2000, 1, 1)
+
     def load_all_checks(self, habit_id):
+        """
+        Checks the database for all times a habit has been performed.
+        :param habit_id: The habit whose checks have been requested.
+        :return: A tuple containing all datetimes of when the habit has been performed (01.01.2000 if it hasn't yet)
+        """
 
         if self._check_if_in_table("checks", habit_id):
             query = "SELECT check_time FROM checks WHERE habit_id=?"
@@ -178,43 +229,14 @@ class DatabaseConnector:
         else:
             return datetime(2000, 1, 1)
 
-    def load_dummy(self):
+    def load_number_of_checks(self, habit_id):
+        """
+        Checks the database for the number of times a habit has been performed.
+        :param habit_id: The habit whose checks have been requested.
+        :return: The number of times the habit has been performed.
         """
 
-        :return:
-        """
+        query = "SELECT COUNT(*) FROM checks WHERE habit_id=?"
+        check_count = self.cur.execute(query, (habit_id,)).fetchall()[0][0]
+        return check_count
 
-        habits_data = pd.read_csv('testdata_habits.csv', sep=';')
-
-        # Technically .to_sql would be better here, but because the habit tracker is better tested with running streaks,
-        # some calculations need to be made on the data saved in the .csv files before importing into the database.
-
-        for index, row in habits_data.iterrows():
-            date_to_save = datetime.today() - timedelta(days=row["days_ago"])
-            time_to_save = datetime.strptime(row["time"], "%H:%M:%S")
-            date_to_save = date_to_save.replace(hour=time_to_save.hour,
-                                                minute=time_to_save.minute,
-                                                second=time_to_save.second)
-            query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
-            self.cur.execute(query, (row["habit_id"], row["name"], row["periodicity"], date_to_save, row["todo"]))
-
-        self.db.commit()
-
-        checks_data = pd.read_csv('testdata_checks.csv', sep=';')
-
-        for index, row in checks_data.iterrows():
-            date_to_save = datetime.today() - timedelta(days=row["days_ago"])
-            time_to_save = datetime.strptime(row["time"], "%H:%M:%S")
-            date_to_save = date_to_save.replace(hour=time_to_save.hour,
-                                                minute=time_to_save.minute,
-                                                second=time_to_save.second)
-            query = "INSERT INTO checks VALUES (?, ?)"
-            self.cur.execute(query, (row["habit_id"], date_to_save))
-
-        self.db.commit()
-
-    def delete_database(self):
-        self.cur.close()
-        self.db.close()
-
-        os.remove(self.name)

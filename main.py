@@ -18,7 +18,7 @@ class MainMenu(tk.Frame):
         lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=3)
 
         habit_list = hana.list_all_habits(db_connect)
-        habit_ids = db_connect.get_all_habit_ids()
+        habit_ids = db_connect.load_all_habit_ids()
         list_string = ""
         streaks_string = ""
         for i in range(len(habit_list)):
@@ -28,12 +28,14 @@ class MainMenu(tk.Frame):
             list_string += habit_list[i]
             streaks_string += str(hana.current_streak_length(db_connect, habit_ids[i]))
 
+        print("longest streaks:", hana.longest_streak_length_general(db_connect))
+        print("current longest streaks:", hana.longest_streak_length_general(db_connect, True))
+
         habit_labels = []
         streak_labels = []
         perform_buttons = []
 
         for i in range(len(habit_list)):
-            print(habit_ids[i])
             habit_labels.append(tk.Label(text=habit_list[i],
                                          foreground=colors["dark"],
                                          background=colors["background"],
@@ -64,6 +66,18 @@ class MainMenu(tk.Frame):
                                    )
             perform_buttons[i].grid(row=i + 1, pady=0, padx=15, column=2)
 
+        stats_text = "Longest streak ever: " + str(hana.longest_streak_length_general(db_connect)) +\
+            "\nCurrently longest streak: " + str(hana.longest_streak_length_general(db_connect, True))
+
+        lbl_stats = tk.Label(master=self,
+                             text=stats_text,
+                             foreground=colors["dark"],
+                             background=colors["background"],
+                             font=("Courier New", 13),
+                             pady=15
+                             )
+        lbl_stats.grid(row=1 + len(habit_list), pady=10, padx=15, columnspan=3)
+
         if len(habit_ids) == 5:
             grow_button = tk.Button(master=self,
                                     text="Add habit",
@@ -74,18 +88,15 @@ class MainMenu(tk.Frame):
                                     font=("Courier New", 15, "bold"),
                                     command=lambda: add_dummy()
                                     )
-            grow_button.grid(row=1 + len(habit_list), pady=20, padx=15, columnspan=3)
+            grow_button.grid(row=2 + len(habit_list), pady=10, padx=15, columnspan=3)
 
 
 def load_dummy():
-    db_connect.load_dummy()
+    db_connect.insert_dummy()
     hab = Habit(db_connect)
     hab.load_data(4)
-    hab.print()
     hana.list_all_habits(db_connect)
     hana.list_habits_with_periodicity(db_connect, 1)
-    for i in (1, 2, 4, 6, 7):
-        print(str(hana.current_streak_length(db_connect, i)))
 
     frm_main_menu = MainMenu(window, db_connect)
 
@@ -94,16 +105,16 @@ def load_dummy():
 
 
 def perform_habit_button(habit_id):
-    print("id", habit_id)
     hab = Habit(db_connect)
     hab.load_data(habit_id)
-    print(hab.latest_check())
     hab.perform()
-    print(hab.latest_check())
+
+    # ToDo Sometimes after performing that Call Gramps habit is counted wrong,
+    # giving it a streak it doesn't have anymore.
 
     frm_main_menu = MainMenu(window, db_connect)
 
-    frm_main_menu.grid(row=0, column=0, sticky="nsew")
+    frm_main_menu.grid(row=0, column=0)
     frm_main_menu.tkraise()
 
 
@@ -113,7 +124,7 @@ def add_dummy():
 
     frm_main_menu = MainMenu(window, db_connect)
 
-    frm_main_menu.grid(row=0, column=0, sticky="nsew")
+    frm_main_menu.grid(row=0, column=0)
     frm_main_menu.tkraise()
 
 

@@ -1,5 +1,3 @@
-
-
 class Streak:
 
     ongoing = True  # Boolean that describes whether a streak is ongoing or not. All streaks start out as ongoing.
@@ -10,8 +8,8 @@ class Streak:
         :param habit_id: The Habit this streak belongs to.
         :param periodicity: How often the habit is to be performed.
         :param started: First day of the streak
-
         """
+
         self.habit_id = habit_id
         self.periodicity = periodicity
         self.started = started
@@ -22,6 +20,7 @@ class Streak:
         Returns the length of the streak in days including the first day as a single day.
         :return: integer of the streak length
         """
+
         return (self.ended - self.started).days + 1
 
     def check_continues_streak(self, check_time):
@@ -45,6 +44,7 @@ class Streak:
         :param check_time: The check to be added to the streak
         :return: Boolean of whether the check continued (True) or broke the streak (False)
         """
+
         if not self.ongoing:
             return
 
