@@ -43,7 +43,7 @@ def calculate_streaks(db_connect, habit_id):
         return 0
 
     for check_time in all_checks:
-        if streaks == [] or len(streaks) == streak_count:
+        if streaks == []:
             streaks.append(Streak(habit_id, habit.periodicity, check_time))
         else:
             s = streaks[streak_count]
@@ -51,6 +51,10 @@ def calculate_streaks(db_connect, habit_id):
             streaks[streak_count] = s
             if not ongoing:
                 streak_count += 1
+                streaks.append(Streak(habit_id, habit.periodicity, check_time))
+
+    for s in streaks:
+        print(habit_id, s.started, s.ended, s.length())
 
     return streaks
 

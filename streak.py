@@ -30,7 +30,11 @@ class Streak:
         :param check_time: Datetime containing the check to be tested
         :return: Boolean of whether the check will continue or break the streak
         """
-        if (check_time - self.ended).days <= self.periodicity:
+
+        check_day = check_time.replace(hour=0, minute=0, second=0)
+        ended_day = self.ended.replace(hour=0, minute=0, second=0)
+
+        if (check_day - ended_day).days <= self.periodicity:
             return True
         else:
             return False
