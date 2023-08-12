@@ -100,6 +100,7 @@ class MainMenu(tk.Frame):
                                     )
             grow_button.grid(row=2 + len(habit_list), pady=10, padx=15, columnspan=3)
 
+        self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
 
     def perform_habit_button(self, habit_id):

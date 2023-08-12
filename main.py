@@ -4,6 +4,7 @@ from Menus.welcome_screen import WelcomeScreen
 
 colors = {"highlight": "#B6D274",
           "background": "#F2E8CF",
+          "entry": "#F5F1E6",
           "light": "#5D8745",
           "dark": "#335C3B",
           "contrast": "#BC4749"}

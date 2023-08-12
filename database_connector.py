@@ -20,7 +20,7 @@ class DatabaseConnector:
 
         habits_query = """CREATE TABLE IF NOT EXISTS habits (
                              habit_id INTEGER PRIMARY KEY,
-                             name CHAR(30),
+                             name CHAR(30) UNIQUE,
                              periodicity INTEGER,
                              creation_date TIMESTAMP,
                              description TEXT
@@ -47,6 +47,18 @@ class DatabaseConnector:
         self.db.close()
 
         os.remove(self.name)
+
+    def reset_database(self):
+        """
+        Fully deletes the database, including its .db file.
+        """
+
+        self.cur.close()
+        self.db.close()
+
+        os.remove(self.name)
+
+        self.__init__(self.name)
 
     def insert_dummy(self):
         """
@@ -124,6 +136,24 @@ class DatabaseConnector:
         self.cur.execute(insert_habit_query, habit_data)
         self.db.commit()
 
+        return habit_id
+
+    def find_habit_id(self, habit_name):
+        """
+        Finds the id of the given habit, as names are unique.
+        If the habit_name is not in the database, it returns 0 instead.
+        :param habit_name: Name of the habit to be loaded
+        :return: An integer containing the habit's id or 0, if habit isn't in database.
+        """
+
+        query = "SELECT COUNT(*) FROM habits WHERE name=?"
+        count = self.cur.execute(query, (habit_name,)).fetchone()[0]
+
+        if count != 0:
+            query = "SELECT habit_id FROM habits WHERE name=?"
+            habit_id = self.cur.execute(query, (habit_name,)).fetchone()[0]
+        else:
+            habit_id = 0
         return habit_id
 
     def load_habit(self, habit_id):

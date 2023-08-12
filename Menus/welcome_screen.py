@@ -48,9 +48,12 @@ class WelcomeScreen(tk.Frame):
                                   foreground=colors["light"],
                                   activebackground=colors["highlight"],
                                   activeforeground=colors["light"],
-                                  font=("Courier New", 15, "bold"))
+                                  font=("Courier New", 15, "bold"),
+                                  command=lambda: self.load_dummy_management()
+                                  )
         btn_start_new.grid(row=2, column=1, padx=10, pady=15)
 
+        self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
 
     def load_dummy(self):
@@ -62,3 +65,13 @@ class WelcomeScreen(tk.Frame):
         self.destroy()
 
         MainMenu(self.window, self.db_connect, self.colors)
+
+    def load_dummy_management(self):
+
+        from Menus.habit_management import HabitManagement
+
+        self.db_connect.insert_dummy()
+        self.grid_forget()
+        self.destroy()
+
+        HabitManagement(self.window, self.db_connect, self.colors)

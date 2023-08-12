@@ -26,8 +26,7 @@ class TestHabit:
         assert habit_a.latest_check().hour == 21
 
     def test_deleting_the_database_and_reloading_a_dummy_dataset_in_then_reset_database_works(self):
-        self.test_db.delete_database()
-        self.test_db = DatabaseConnector("test_database.db")
+        self.test_db.reset_database()
 
         self.test_db.insert_dummy()
 
