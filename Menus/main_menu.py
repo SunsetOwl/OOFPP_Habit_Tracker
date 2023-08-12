@@ -1,6 +1,7 @@
 import tkinter as tk
 from habit import Habit
 import habit_analytics as hana
+from datetime import datetime
 
 
 class MainMenu(tk.Frame):
@@ -88,7 +89,7 @@ class MainMenu(tk.Frame):
                              )
         lbl_stats.grid(row=1 + len(habit_list), pady=10, padx=15, columnspan=3)
 
-        if len(habit_ids) == 5:
+        if datetime.today().microsecond % 2 == 0:
             grow_button = tk.Button(master=self,
                                     text="Add habit",
                                     background=colors["highlight"],
@@ -99,6 +100,17 @@ class MainMenu(tk.Frame):
                                     command=lambda: self.add_dummy()
                                     )
             grow_button.grid(row=2 + len(habit_list), pady=10, padx=15, columnspan=3)
+        else:
+            btn_habit_management = tk.Button(master=self,
+                                             text="Habit Management",
+                                             background=colors["highlight"],
+                                             foreground=colors["light"],
+                                             activebackground=colors["highlight"],
+                                             activeforeground=colors["light"],
+                                             font=("Courier New", 15, "bold"),
+                                             command=lambda: self.habit_management_button()
+                                             )
+            btn_habit_management.grid(row=2 + len(habit_list), pady=10, padx=15, columnspan=3)
 
         self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
@@ -114,11 +126,22 @@ class MainMenu(tk.Frame):
         MainMenu(self.window, self.db_connect, self.colors)
 
     def add_dummy(self):
+
         hab = Habit(self.db_connect, name="Water the Garden", periodicity=7,
                     description="Water all plants in the garden")
-        hab.new_habit()
+
+        if hab.name not in hana.list_all_habits(self.db_connect):
+            hab.new_habit()
 
         self.grid_forget()
         self.destroy()
 
         MainMenu(self.window, self.db_connect, self.colors)
+
+    def habit_management_button(self):
+        from Menus.habit_management import HabitManagement
+
+        self.grid_forget()
+        self.destroy()
+
+        HabitManagement(self.window, self.db_connect, self.colors)

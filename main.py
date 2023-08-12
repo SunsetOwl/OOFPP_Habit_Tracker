@@ -1,6 +1,7 @@
 import tkinter as tk
 from database_connector import DatabaseConnector
 from Menus.welcome_screen import WelcomeScreen
+from Menus.main_menu import MainMenu
 
 colors = {"highlight": "#B6D274",
           "background": "#F2E8CF",
@@ -19,10 +20,9 @@ window.columnconfigure(0, weight=1)
 
 db_connect = DatabaseConnector()
 
-WelcomeScreen(window, db_connect, colors)
+if len(db_connect.load_all_habit_ids()) > 0:
+    MainMenu(window, db_connect, colors)
+else:
+    WelcomeScreen(window, db_connect, colors)
 
 window.mainloop()
-
-# TODO Yeet
-
-db_connect.delete_database()
