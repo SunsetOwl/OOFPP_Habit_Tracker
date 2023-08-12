@@ -7,7 +7,6 @@
 
 from datetime import datetime, timedelta
 from habit import Habit
-from database_connector import DatabaseConnector
 from streak import Streak
 
 
@@ -99,7 +98,12 @@ def longest_streak_length(db_connect, habit_id):
     """
 
     streaks = calculate_streaks(db_connect, habit_id)
-    streak_lengths = [s.length() for s in streaks]
+
+    if streaks == 0:
+        return 0
+    else:
+        streak_lengths = [s.length() for s in streaks]
+
     return max(streak_lengths)
 
 

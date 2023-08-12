@@ -23,7 +23,7 @@ class DatabaseConnector:
                              name CHAR(30),
                              periodicity INTEGER,
                              creation_date TIMESTAMP,
-                             todo TEXT
+                             description TEXT
                              )"""
         checks_query = """CREATE TABLE IF NOT EXISTS checks (
                              habit_id INTEGER,
@@ -64,7 +64,8 @@ class DatabaseConnector:
                                                 minute=time_to_save.minute,
                                                 second=time_to_save.second)
             query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
-            self.cur.execute(query, (row["habit_id"], row["name"], row["periodicity"], date_to_save, row["todo"]))
+            self.cur.execute(query, (row["habit_id"], row["name"],
+                                     row["periodicity"], date_to_save, row["description"]))
 
         checks_data = pd.read_csv('testdata_checks.csv', sep=';')
 
@@ -102,13 +103,13 @@ class DatabaseConnector:
         count = self.cur.execute(query).fetchone()[0]
         return count != 0
 
-    def new_habit(self, name, periodicity, created, todo):
+    def new_habit(self, name, periodicity, created, description):
         """
         Adds a new habit to the habits table by entering all the provided data, then returns the newly assigned id.
         :param name: The name of the habit.
         :param periodicity: Integer indicating after how many days a habit needs to be re-performed to retain a streak.
         :param created: Saves the exact time and date of when the habit was set up.
-        :param todo: Contains a more detailed description of the habit.
+        :param description: Contains a more detailed description of the habit.
         :return: The assigned id of the habit
         """
 
@@ -118,7 +119,7 @@ class DatabaseConnector:
             max_habit_query = "SELECT MAX(habit_id) FROM habits"
             habit_id = self.cur.execute(max_habit_query).fetchone()[0] + 1
 
-        habit_data = (habit_id, name, periodicity, created, todo)
+        habit_data = (habit_id, name, periodicity, created, description)
         insert_habit_query = "INSERT INTO habits VALUES (?, ?, ?, ?, ?)"
         self.cur.execute(insert_habit_query, habit_data)
         self.db.commit()

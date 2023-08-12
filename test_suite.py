@@ -25,7 +25,7 @@ class TestHabit:
 
         assert habit_a.latest_check().hour == 21
 
-    def test_deleting_the_database_and_reloading_a_dummy_dataset_in_the_reset_database_works(self):
+    def test_deleting_the_database_and_reloading_a_dummy_dataset_in_then_reset_database_works(self):
         self.test_db.delete_database()
         self.test_db = DatabaseConnector("test_database.db")
 
@@ -42,8 +42,8 @@ class TestHabit:
         habit_b = Habit(self.test_db)
         habit_b.load_data(habit_a.habit_id)
 
-        assert (habit_a.habit_id, habit_a.name, habit_a.periodicity, habit_a.created, habit_a.todo) == \
-               (habit_b.habit_id, habit_b.name, habit_b.periodicity, habit_b.created, habit_b.todo)
+        assert (habit_a.habit_id, habit_a.name, habit_a.periodicity, habit_a.created, habit_a.description) == \
+               (habit_b.habit_id, habit_b.name, habit_b.periodicity, habit_b.created, habit_b.description)
 
     def test_when_habit_added_then_one_more_entry_in_database(self):
         entries_before = len(self.test_db.load_all_habit_ids())
@@ -85,7 +85,7 @@ class TestHabit:
         assert result_one == "Saved"
         assert result_two == "Too Early"
 
-    @freeze_time('2023-08-03 01:12:13.000001', tick=True)
+    @freeze_time('01:12:13.000001', tick=True)
     def test_edgecase_perform_a_habit_at_1_am_that_has_been_performed_before_today_then_return_too_early(self):
         habit_a = Habit(self.test_db)
         habit_a.load_data(1)

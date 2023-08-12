@@ -21,7 +21,10 @@ class Streak:
         :return: integer of the streak length
         """
 
-        return (self.ended - self.started).days + 1
+        start_day = self.started.replace(hour=0, minute=0, second=0, microsecond=0)
+        end_day = self.ended.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        return (end_day - start_day).days + 1
 
     def check_continues_streak(self, check_time):
         """
@@ -30,8 +33,8 @@ class Streak:
         :return: Boolean of whether the check will continue or break the streak
         """
 
-        check_day = check_time.replace(hour=0, minute=0, second=0)
-        ended_day = self.ended.replace(hour=0, minute=0, second=0)
+        check_day = check_time.replace(hour=0, minute=0, second=0, microsecond=0)
+        ended_day = self.ended.replace(hour=0, minute=0, second=0, microsecond=0)
 
         if (check_day - ended_day).days <= self.periodicity:
             return True

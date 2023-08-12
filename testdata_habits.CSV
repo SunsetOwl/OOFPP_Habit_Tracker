@@ -1,4 +1,4 @@
-habit_id;name;periodicity;todo;days_ago;time
+habit_id;name;periodicity;description;days_ago;time
 1;No-Spend Day;7;Have a day without spending money at least once a week;63;14:42:40
 2;Read 10 Pages;1;Read 10 pages of any book;51;14:51:13
 4;Journal;1;Capture my day by writing in my journal;45;10:51:41

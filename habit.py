@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 
 class Habit:
 
-    def __init__(self, db_connect, habit_id=0, name="New", periodicity=1, created=datetime.today(), todo="Do the Task"):
+    def __init__(self, db_connect, habit_id=0, name="New", periodicity=1,
+                 created=datetime.today(), description="Do the Task"):
         """
         The Habit class is used to contain all relevant information about a habit.
         It has functions for loading, saving and deleting a habit.
@@ -12,14 +13,14 @@ class Habit:
         :param name: The name of the habit.
         :param periodicity: Integer indicating after how many days a habit needs to be re-performed to retain a streak.
         :param created: Saves the exact time and date of when the habit was set up.
-        :param todo: Contains a more detailed description of the habit.
+        :param description: Contains a more detailed description of the habit.
         """
         self.habit_id = habit_id
         self.name = name
         self.periodicity = periodicity
         self.created = created
         self.db_connect = db_connect
-        self.todo = todo
+        self.description = description
 
     def new_habit(self):
         """
@@ -27,7 +28,7 @@ class Habit:
         then assigns it the automatically generated habit_id.
         """
 
-        self.habit_id = self.db_connect.new_habit(self.name, self.periodicity, self.created, self.todo)
+        self.habit_id = self.db_connect.new_habit(self.name, self.periodicity, self.created, self.description)
 
     def load_data(self, habit_id):
         """
@@ -42,7 +43,7 @@ class Habit:
             self.name = habit_data[1]
             self.periodicity = habit_data[2]
             self.created = datetime.strptime(habit_data[3], '%Y-%m-%d %H:%M:%S.%f')
-            self.todo = habit_data[4]
+            self.description = habit_data[4]
 
     def delete(self):
         """
