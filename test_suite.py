@@ -3,6 +3,7 @@ from streak import Streak
 from database_connector import DatabaseConnector
 from datetime import datetime, timedelta
 from freezegun import freeze_time
+from time import sleep
 
 
 class TestHabit:
@@ -79,6 +80,7 @@ class TestHabit:
         habit_a = Habit(self.test_db)
         habit_a.load_data(1)
         result_one = habit_a.perform()
+        sleep(1)
         result_two = habit_a.perform()
 
         assert result_one == "Saved"

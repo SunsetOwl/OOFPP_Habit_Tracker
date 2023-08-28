@@ -1,10 +1,3 @@
-"""
-- return a list of all currently tracked habits,
-- return a list of all habits with the same periodicity,
-- return the longest run streak of all defined habits,
-- and return the longest run streak for a given habit.
-"""
-
 from datetime import datetime, timedelta
 from habit import Habit
 from streak import Streak

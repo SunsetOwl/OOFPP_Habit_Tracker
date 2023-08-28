@@ -1,0 +1,4 @@
+pandas
+freezegun
+numpy
+pytest
