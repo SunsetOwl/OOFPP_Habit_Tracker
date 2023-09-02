@@ -80,6 +80,7 @@ class DatabaseConnector:
                                      row["periodicity"], date_to_save, row["description"]))
 
         checks_data = pd.read_csv('testdata_checks.csv', sep=';')
+        self.cur.execute("PRAGMA foreign_keys = on")
 
         for index, row in checks_data.iterrows():
             date_to_save = datetime.today() - timedelta(days=row["days_ago"])
@@ -179,6 +180,7 @@ class DatabaseConnector:
 
         if self._check_if_in_table("habits", habit_id):
             query = "DELETE FROM habits WHERE habit_id=?"
+            self.cur.execute("PRAGMA foreign_keys = on")
             self.cur.execute(query, (habit_id,))
             self.db.commit()
 
@@ -188,7 +190,7 @@ class DatabaseConnector:
         :return: A tuple containing the ids of all habits in the database.
         """
 
-        query = "SELECT habit_id FROM habits"
+        query = "SELECT habit_id FROM habits ORDER BY habit_id ASC"
         all_habit_ids = self.cur.execute(query).fetchall()
         return [habit[0] for habit in all_habit_ids]
 
@@ -199,7 +201,7 @@ class DatabaseConnector:
         :return: A tuple containing the ids of all selected habits.
         """
 
-        query = "SELECT habit_id FROM habits WHERE periodicity == ?"
+        query = "SELECT habit_id FROM habits WHERE periodicity == ? ORDER BY habit_id ASC"
         habit_ids = self.cur.execute(query, (periodicity,)).fetchall()
         return [habit[0] for habit in habit_ids]
 
@@ -228,6 +230,7 @@ class DatabaseConnector:
         """
 
         query = "INSERT INTO checks VALUES (?, ?)"
+        self.cur.execute("PRAGMA foreign_keys = on")
         self.cur.execute(query, (habit_id, check_time))
         self.db.commit()
 
@@ -270,4 +273,18 @@ class DatabaseConnector:
         query = "SELECT COUNT(*) FROM checks WHERE habit_id=?"
         check_count = self.cur.execute(query, (habit_id,)).fetchall()[0][0]
         return check_count
+
+    def print_habits(self):
+
+        query = "SELECT * FROM habits"
+        all_habit_data = self.cur.execute(query).fetchall()
+        for data in all_habit_data:
+            print(data)
+
+    def print_checks(self):
+
+        query = "SELECT * FROM checks"
+        all_check_data = self.cur.execute(query).fetchall()
+        for data in all_check_data:
+            print(data)
 

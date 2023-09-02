@@ -115,6 +115,14 @@ class TestHabit:
 
         assert not streak.ongoing
 
+    def test_delete_a_habit_then_checks_are_deleted_as_well(self):
+        habit_a = Habit(self.test_db)
+        habit_a.load_data(1)
+        habit_a.perform()
+        habit_a.delete()
+
+        assert not self.test_db._check_if_in_table("habits", 1)
+
     def teardown_method(self):
         self.test_db.delete_database()
         self.empty_db.delete_database()

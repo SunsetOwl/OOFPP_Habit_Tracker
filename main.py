@@ -2,17 +2,13 @@ import tkinter as tk
 from database_connector import DatabaseConnector
 from Menus.welcome_screen import WelcomeScreen
 from Menus.main_menu import MainMenu
+from Menus.settings import Settings
 
-colors = {"highlight": "#B6D274",
-          "background": "#F2E8CF",
-          "entry": "#F5F1E6",
-          "light": "#5D8745",
-          "dark": "#335C3B",
-          "contrast": "#BC4749"}
+settings = Settings()
 
 window = tk.Tk()
 window.title("Habit Tracker")
-window.configure(background=colors["background"])
+window.configure(background=settings.colors["background"])
 window.minsize(400, 500)
 window.maxsize(400, 700)
 window.rowconfigure(0, weight=1)
@@ -21,8 +17,8 @@ window.columnconfigure(0, weight=1)
 db_connect = DatabaseConnector()
 
 if len(db_connect.load_all_habit_ids()) > 0:
-    MainMenu(window, db_connect, colors)
+    MainMenu(window, db_connect)
 else:
-    WelcomeScreen(window, db_connect, colors)
+    WelcomeScreen(window, db_connect)
 
 window.mainloop()
