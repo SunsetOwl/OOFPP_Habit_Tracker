@@ -54,19 +54,20 @@ class HabitAppDropdown(tk.OptionMenu):
                        foreground=settings.colors["light"],
                        activebackground=settings.colors["entry"],
                        activeforeground=settings.colors["light"],
-                       font=(settings.font, 15)
+                       font=(settings.font, 13)
                        )
 
 
 class HabitAppEntry(tk.Entry):
 
-    def __init__(self, master, width):
+    def __init__(self, master, width, entered):
         tk.Entry.__init__(self,
                           master=master,
                           background=settings.colors["entry"],
                           foreground=settings.colors["light"],
                           font=(settings.font, 13),
-                          width=width
+                          width=width,
+                          textvariable=entered
                           )
 
 
@@ -81,3 +82,9 @@ class HabitAppRadio(tk.Radiobutton):
                                 activebackground=settings.colors["background"],
                                 activeforeground=settings.colors["entry"]
                                 )
+
+
+class HabitAppFrame(tk.Frame):
+
+    def __init__(self, master):
+        tk.Frame.__init__(self, master=master, background=settings.colors["background"])

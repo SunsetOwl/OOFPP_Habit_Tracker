@@ -1,22 +1,19 @@
 import tkinter as tk
+import tkinter.messagebox
 from habit import Habit
 import habit_analytics as hana
-from database_connector import DatabaseConnector
-from Menus.settings import Settings
 import Menus.standard_menu_elements as elems
 
 
-class HabitManagement(tk.Frame):
+class HabitManagement(elems.HabitAppFrame):
 
     def __init__(self, window, db_connect):
         self.window = window
         self.db_connect = db_connect
-        self.settings = Settings()
-        self.colors = self.settings.colors
 
-        tk.Frame.__init__(self, self.window, background=self.colors["background"])
+        elems.HabitAppFrame.__init__(self, self.window)
 
-        self.grid(row=0, column=0, sticky="nsew")
+        self.pack()
 
         lbl_mm_title = elems.HabitAppTitle(self, "Habit Management")
         lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=2)
@@ -25,23 +22,29 @@ class HabitManagement(tk.Frame):
 
         self.period_chosen = tk.StringVar()
         self.period_chosen.set("D")
+        self.period_custom = tk.StringVar()
+        self.period_custom.set("0")
+        self.new_name = tk.StringVar()
+        self.new_name.set("")
+        self.new_description = tk.StringVar()
+        self.new_description.set("")
 
         lbl_add_habit = elems.HabitAppText(self, "To add a habit, \nfill in the following information:")
-        lbl_add_habit.grid(row=1, pady=10, columnspan=2)
+        lbl_add_habit.grid(row=1, pady=(10, 0), columnspan=2)
 
-        frm_name = tk.Frame(master=self, background=self.colors["background"])
+        frm_name = elems.HabitAppFrame(self)
         lbl_name = elems.HabitAppText(frm_name, "Name:")
-        txt_name = elems.HabitAppEntry(frm_name, 20)
+        txt_name = elems.HabitAppEntry(frm_name, 20, self.new_name)
         lbl_name.grid(row=2, padx=20, column=0)
         txt_name.grid(row=2, padx=20, column=1)
-        frm_name.grid(row=2, pady=(20, 0), columnspan=2)
+        frm_name.grid(row=2, pady=(15, 0), columnspan=2)
 
-        frm_period_choice = tk.Frame(master=self, background=self.colors["background"])
+        frm_period_choice = elems.HabitAppFrame(self)
 
         lbl_periodicity = elems.HabitAppText(frm_period_choice, "How often do\nyou want to\nperform\nthis habit?")
         lbl_periodicity.grid(row=0, column=0, padx=(10, 30))
 
-        frm_period_options = tk.Frame(master=frm_period_choice, background=self.colors["background"])
+        frm_period_options = elems.HabitAppFrame(frm_period_choice)
 
         rb_daily = elems.HabitAppRadio(frm_period_options, "D", self.period_chosen)
         rb_daily.grid(row=0, column=0)
@@ -55,10 +58,10 @@ class HabitManagement(tk.Frame):
         lbl_weekly = elems.HabitAppText(frm_period_options, "Weekly")
         lbl_weekly.grid(row=1, padx=(5, 20), column=1, sticky="w")
 
-        frm_custom_entry = tk.Frame(master=frm_period_options, background=self.colors["background"])
+        frm_custom_entry = elems.HabitAppFrame(frm_period_options)
         lbl_custom_front = elems.HabitAppText(frm_custom_entry, "Every")
         lbl_custom_front.grid(row=0, column=0)
-        txt_custom = elems.HabitAppEntry(frm_custom_entry, 5)
+        txt_custom = elems.HabitAppEntry(frm_custom_entry, 4, self.period_custom)
         txt_custom.grid(row=0, padx=5, column=1)
         lbl_custom_back = elems.HabitAppText(frm_custom_entry, "Days")
         lbl_custom_back.grid(row=0, column=2)
@@ -67,41 +70,110 @@ class HabitManagement(tk.Frame):
 
         frm_period_options.grid(row=0, column=1)
 
-        frm_period_choice.grid(row=3, pady=(20, 0), rowspan=2, columnspan=2)
+        frm_period_choice.grid(row=3, pady=(15, 0), columnspan=2)
 
         lbl_description = elems.HabitAppText(self, "What does this habit entail?")
-        lbl_description.grid(row=5, pady=(20, 0), columnspan=2)
-        txt_description = elems.HabitAppEntry(self, 30)
-        txt_description.grid(row=6, columnspan=2)
+        lbl_description.grid(row=4, pady=(15, 0), columnspan=2)
+        txt_description = elems.HabitAppEntry(self, 34, self.new_description)
+        txt_description.grid(row=5, columnspan=2)
 
-        btn_add_habit = elems.HabitAppButton(self, "Add Habit",
-                                                lambda: print("hello"))
-        btn_add_habit.grid(row=7, columnspan=2, pady=(20, 0), padx=10)
+        btn_add_habit = elems.HabitAppButton(self, "Add Habit", lambda: self.add_habit_button())
+        btn_add_habit.grid(row=6, columnspan=2, pady=(15, 0), padx=10)
 
         if len(habit_ids) > 0:
+
+            lbl_line = elems.HabitAppText(self, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            lbl_line.grid(row=7, columnspan=2, pady=(10, 0))
+
             habit_list = hana.list_all_habits(db_connect)
 
             self.selected_habit = tk.StringVar(self.window)
             self.selected_habit.set("Select a Habit")
 
             lbl_delete_habit = elems.HabitAppText(self, "To delete a habit,\nchoose it from the dropdown menu:")
-            lbl_delete_habit.grid(row=8, pady=10, padx=10, columnspan=2)
+            lbl_delete_habit.grid(row=8, padx=10, columnspan=2)
 
-            opt_habit_list = elems.HabitAppDropdown(self, self.selected_habit, habit_list)
-            opt_habit_list.grid(row=9, column=0, pady=10, padx=10)
+            frm_delete = elems.HabitAppFrame(self)
 
-            btn_delete_habit = elems.HabitAppButton(self, "Delete Habit",
+            opt_habit_list = elems.HabitAppDropdown(frm_delete, self.selected_habit, habit_list)
+            opt_habit_list.grid(row=0, column=0, pady=10, padx=10)
+
+            btn_delete_habit = elems.HabitAppButton(frm_delete, "Delete",
                                                     lambda: self.delete_habit(self.selected_habit.get()))
-            btn_delete_habit.grid(row=9, column=1, pady=10, padx=10)
+            btn_delete_habit.grid(row=0, column=1, pady=10, padx=15)
+
+            frm_delete.grid(row=9, columnspan=2, pady=10)
+
+        lbl_line2 = elems.HabitAppText(self, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        lbl_line2.grid(row=10, columnspan=2)
 
         btn_reset_database = elems.HabitAppButton(self, "Reset Database", lambda: self.reset_database_button())
-        btn_reset_database.grid(row=10, pady=10, padx=15, columnspan=2)
+        btn_reset_database.grid(row=11, pady=(10, 20), padx=20, column=1, sticky="e")
 
         btn_go_back = elems.HabitAppButton(self, "Back", lambda: self.go_back_button())
-        btn_go_back.grid(row=11, pady=10, padx=15, columnspan=2)
+        btn_go_back.grid(row=11, pady=(10, 20), padx=20, column=0, sticky="w")
 
         self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
+
+    def add_habit_button(self):
+
+        if self.new_name.get() == "":
+            tk.messagebox.showerror("No Name", "You have not provided a name for your new habit.\n" +
+                                    "Please enter one in the provided field.")
+            return
+        elif len(self.new_name.get()) > 20:
+            tk.messagebox.showerror("Name too long", "The name you've chosen for your habit is a bit too long.\n" +
+                                    "Try to be more precise and keep it within 20 characters.\n" +
+                                    "Habits work best when they're clear and not too convoluted. " +
+                                    "Maybe you can break it down into smaller steps? :)")
+            return
+        if self.new_description.get() == "":
+            tk.messagebox.showerror("No Description", "You have not described your new habit.\n" +
+                                    "Please add a description in the provided field.")
+            return
+        if self.period_chosen.get() == "C":
+            if self.period_custom.get() == "0":
+                tk.messagebox.showerror("No Periodicity", "You have chosen a custom periodicity for your new habit, " +
+                                        "but haven't provided a day count.\n" +
+                                        "Please enter one in the provided field or choose 'Daily' or 'Weekly'.")
+                return
+            elif not str.isnumeric(self.period_custom.get()):
+                tk.messagebox.showerror("No Number", "You have chosen a custom periodicity for your new habit, " +
+                                        "but haven't entered a valid number for your day count." +
+                                        "This is most likely due to you entering letters, or special characters." +
+                                        "Non-natural numbers like 4.5, pi or -4 are also not good numbers " +
+                                        "to set for watering your habit plants.\n" +
+                                        "Please check your entry for any rogue characters.")
+                return
+
+        periodicity = 0
+
+        match self.period_chosen.get():
+            case "D":
+                periodicity = 1
+            case "W":
+                periodicity = 7
+            case "C":
+                periodicity = int(self.period_custom.get())
+
+        hab = Habit(self.db_connect,
+                    name=self.new_name.get(),
+                    periodicity=periodicity,
+                    description=self.new_description.get()
+                    )
+
+        if hab.name in hana.list_all_habits(self.db_connect):
+            tk.messagebox.showerror("Duplicate Habit", "You already planted a habit of this name, " +
+                                    "please choose a different name for your new habit.\n")
+            return
+
+        hab.new_habit()
+
+        self.grid_forget()
+        self.destroy()
+
+        HabitManagement(self.window, self.db_connect)
 
     def reset_database_button(self):
 
@@ -115,6 +187,12 @@ class HabitManagement(tk.Frame):
         WelcomeScreen(self.window, self.db_connect)
 
     def go_back_button(self):
+
+        if len(self.db_connect.load_all_habit_ids()) == 0:
+            tk.messagebox.showerror("No Habits", "You haven't set up a habit yet,\n" +
+                                    "so there is no habit patch for you to get back to.\n" +
+                                    "Plant a habit first, then you can go explore!")
+            return
 
         from Menus.main_menu import MainMenu
 

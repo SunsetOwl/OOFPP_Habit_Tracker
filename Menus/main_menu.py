@@ -1,21 +1,16 @@
-import tkinter as tk
 from habit import Habit
 import habit_analytics as hana
-from datetime import datetime
-from Menus.settings import Settings
 import Menus.standard_menu_elements as elems
 
 
-class MainMenu(tk.Frame):
+class MainMenu(elems.HabitAppFrame):
 
     def __init__(self, window, db_connect, page=0):
         self.window = window
         self.db_connect = db_connect
-        self.settings = Settings()
-        self.colors = self.settings.colors
         self.page = page
 
-        tk.Frame.__init__(self, self.window, background=self.colors["background"])
+        elems.HabitAppFrame.__init__(self, self.window)
         self.pack()
         self.grid_columnconfigure(0, minsize=200)
         self.grid_columnconfigure(1, minsize=40)
@@ -48,20 +43,20 @@ class MainMenu(tk.Frame):
 
         for i in page_list:
             habit_labels.append(elems.HabitAppText(self, habit_list[i]))
-            habit_labels[row-1].grid(row=row, pady=15, padx=10, column=0)
+            habit_labels[row-1].grid(row=row, pady=10, padx=10, column=0)
 
             streak_label = str(hana.current_streak_length(db_connect, habit_ids[i]))
             streak_labels.append(elems.HabitAppText(self, streak_label))
-            streak_labels[row-1].grid(row=row, pady=15, padx=10, column=1)
+            streak_labels[row-1].grid(row=row, pady=10, padx=10, column=1)
 
             perform_buttons.append(elems.HabitAppButton(self, "Water",
                                                         lambda i=i: self.perform_habit_button(habit_ids[i])))
-            perform_buttons[row-1].grid(row=row, pady=10, padx=10, column=2)
+            perform_buttons[row-1].grid(row=row, pady=5, padx=10, column=2)
 
             row += 1
 
         # Set up the Buttons for previous/next page when dealing with more than 5 habits
-        frm_back_next = tk.Frame(master=self, background=self.colors["background"])
+        frm_back_next = elems.HabitAppFrame(self)
 
         if page > 0:
             btn_previous = elems.HabitAppButton(frm_back_next, "<", lambda: self.previous_page())
@@ -85,12 +80,8 @@ class MainMenu(tk.Frame):
         lbl_stats = elems.HabitAppText(self, stats_text)
         lbl_stats.grid(row=7, pady=10, padx=15, columnspan=3)
 
-        if datetime.today().microsecond % 2 == 0:
-            btn_grow = elems.HabitAppButton(self, "Add habit", lambda: self.add_dummy())
-            btn_grow.grid(row=8, pady=10, padx=15, columnspan=3)
-        else:
-            btn_habit_management = elems.HabitAppButton(self, "Habit Management", lambda: self.habit_mgmt_button())
-            btn_habit_management.grid(row=8, pady=10, padx=15, columnspan=3)
+        btn_habit_management = elems.HabitAppButton(self, "Habit Management", lambda: self.habit_mgmt_button())
+        btn_habit_management.grid(row=8, pady=10, padx=15, columnspan=3)
 
         self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
@@ -116,19 +107,6 @@ class MainMenu(tk.Frame):
         self.destroy()
 
         MainMenu(self.window, self.db_connect, self.page-1)
-
-    def add_dummy(self):
-
-        hab = Habit(self.db_connect, name="Water the Garden", periodicity=7,
-                    description="Water all plants in the garden")
-
-        if hab.name not in hana.list_all_habits(self.db_connect):
-            hab.new_habit()
-
-        self.grid_forget()
-        self.destroy()
-
-        MainMenu(self.window, self.db_connect)
 
     def habit_mgmt_button(self):
         from Menus.habit_management import HabitManagement
