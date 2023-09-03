@@ -22,6 +22,9 @@ class Habit:
         self.db_connect = db_connect
         self.description = description
 
+        if self.habit_id > 0:
+            self.load_data(self.habit_id)
+
     def new_habit(self):
         """
         Saves the habit to the database with all current parameters,

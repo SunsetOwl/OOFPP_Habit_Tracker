@@ -4,6 +4,7 @@ from database_connector import DatabaseConnector
 from datetime import datetime, timedelta
 from freezegun import freeze_time
 from time import sleep
+import habit_analytics as hana
 
 
 class TestHabit:
@@ -15,14 +16,12 @@ class TestHabit:
         self.test_db.insert_dummy()
 
     def test_dummy_habit_data_loaded_correctly_in_setup(self):
-        habit_a = Habit(self.test_db)
-        habit_a.load_data(1)
+        habit_a = Habit(self.test_db, 1)
 
         assert habit_a.created.day == (datetime.today()-timedelta(days=63)).day
 
     def test_dummy_checks_data_loaded_correctly_in_setup(self):
-        habit_a = Habit(self.test_db)
-        habit_a.load_data(1)
+        habit_a = Habit(self.test_db, 1)
 
         assert habit_a.latest_check().hour == 21
 
@@ -31,16 +30,14 @@ class TestHabit:
 
         self.test_db.insert_dummy()
 
-        habit_a = Habit(self.test_db)
-        habit_a.load_data(1)
+        habit_a = Habit(self.test_db, 1)
 
         assert habit_a.latest_check().hour == 21
 
     def test_when_habit_added_then_habit_loadable_from_database(self):
         habit_a = Habit(self.test_db)
         habit_a.new_habit()
-        habit_b = Habit(self.test_db)
-        habit_b.load_data(habit_a.habit_id)
+        habit_b = Habit(self.test_db, habit_a.habit_id)
 
         assert (habit_a.habit_id, habit_a.name, habit_a.periodicity, habit_a.created, habit_a.description) == \
                (habit_b.habit_id, habit_b.name, habit_b.periodicity, habit_b.created, habit_b.description)
@@ -69,16 +66,14 @@ class TestHabit:
         assert habit_a.check_count() == 0
 
     def test_perform_a_habit_then_return_saved_and_latest_check_is_in_database(self):
-        habit_a = Habit(self.test_db)
-        habit_a.load_data(1)
+        habit_a = Habit(self.test_db, 1)
         result = habit_a.perform()
 
         assert result == "Saved"
         assert self.test_db.load_latest_check(habit_a.habit_id).day == (datetime.today() - timedelta(hours=2)).day
 
     def test_perform_a_habit_at_that_has_been_performed_before_today_then_return_too_early(self):
-        habit_a = Habit(self.test_db)
-        habit_a.load_data(1)
+        habit_a = Habit(self.test_db, 1)
         result_one = habit_a.perform()
         sleep(1)
         result_two = habit_a.perform()
@@ -88,8 +83,7 @@ class TestHabit:
 
     @freeze_time('01:12:13.000001', tick=True)
     def test_edgecase_perform_a_habit_at_1_am_that_has_been_performed_before_today_then_return_too_early(self):
-        habit_a = Habit(self.test_db)
-        habit_a.load_data(1)
+        habit_a = Habit(self.test_db, 1)
         result_one = habit_a.perform()
         result_two = habit_a.perform()
 
@@ -114,6 +108,27 @@ class TestHabit:
         streak.add_check(datetime(2023, 1, 10))
 
         assert not streak.ongoing
+
+    def test_the_consistency_of_a_habit(self):
+        assert hana.consistency(self.test_db, 2, 28) == (27, 28)
+
+    def test_the_consistency_calculation_of_a_habit_that_has_been_performed_more_than_necessary(self):
+        assert hana.consistency(self.test_db, 1, 28) == (5, 4)
+
+    def test_create_a_habit_then_its_consistency_will_be_0_out_of_1(self):
+        habit_a = Habit(self.test_db, name="Testing Habit")
+        habit_a.new_habit()
+
+        assert hana.consistency(self.test_db, habit_a.habit_id, 28) == (0, 1)
+
+    def test_consistency_of_1_day_tests_if_habit_was_performed_today(self):
+        habit_a = Habit(self.test_db, 1)
+        habit_a.perform()
+        habit_b = Habit(self.test_db, name="Testing Habit")
+        habit_b.new_habit()
+
+        assert hana.consistency(self.test_db, habit_a.habit_id, 1)[0] == 1
+        assert hana.consistency(self.test_db, habit_b.habit_id, 1)[0] == 0
 
     def test_delete_a_habit_then_checks_are_deleted_as_well(self):
         habit_a = Habit(self.test_db)

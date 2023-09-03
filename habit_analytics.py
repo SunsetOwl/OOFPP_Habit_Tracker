@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from habit import Habit
 from streak import Streak
 
@@ -38,8 +38,7 @@ def calculate_streaks(db_connect, habit_id):
     :return: A list of all streaks of the habit.
     """
 
-    habit = Habit(db_connect)
-    habit.load_data(habit_id)
+    habit = Habit(db_connect, habit_id)
     all_checks = db_connect.load_all_checks(habit_id)
     streaks = []
     streak_count = 0
@@ -48,7 +47,7 @@ def calculate_streaks(db_connect, habit_id):
         return 0
 
     for check_time in all_checks:
-        if streaks == []:
+        if not streaks:
             streaks.append(Streak(habit_id, habit.periodicity, check_time))
         else:
             s = streaks[streak_count]
@@ -125,3 +124,37 @@ def longest_streak_length_general(db_connect, current=False):
         results.append((habit_ids[max_locations[i]], streak_lengths[max_locations[i]]))
 
     return results
+
+
+def consistency(db_connect, habit_id, timeframe):
+    """
+    Calculates how often the given habit has been and should have been performed within a given previous timeframe
+    to see how consistent the user has been outside of being able to uphold a streak.
+    The calculation of the "should have" does take into account when the habit was created.
+    :param db_connect: The Database Connector connected to the database
+    :param habit_id: The id of the habit to be analysed
+    :param timeframe: The number of days to check. For example: 28 checks the past 4 fours weeks, today included
+    :return: A tuple containing the number of times the habit has been performed within that timeframe
+             and how often it should have been performed at least (rounded down).
+    """
+
+    first_date = datetime.today().date() - timedelta(days=timeframe-1)
+    hab = Habit(db_connect, habit_id)
+
+    if hab.created.date() > first_date:
+        timeframe = (datetime.today().date() - hab.created.date()).days
+        first_date = hab.created.date()
+    if hab.created.date() == datetime.today().date():
+        timeframe = 1
+
+    all_checks = db_connect.load_all_checks(habit_id)
+    valid_checks = []
+
+    if all_checks == datetime(2000, 1, 1):
+        return 0, timeframe // hab.periodicity
+
+    for check in all_checks:
+        if check.date() >= first_date and check.date() not in valid_checks:
+            valid_checks.append(check.date())
+
+    return len(valid_checks), timeframe // hab.periodicity
