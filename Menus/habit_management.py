@@ -98,8 +98,7 @@ class HabitManagement(elems.HabitAppFrame):
             opt_habit_list = elems.HabitAppDropdown(frm_delete, self.selected_habit, habit_list)
             opt_habit_list.grid(row=0, column=0, pady=10, padx=10)
 
-            btn_delete_habit = elems.HabitAppButton(frm_delete, "Delete",
-                                                    lambda: self.delete_habit(self.selected_habit.get()))
+            btn_delete_habit = elems.HabitAppButton(frm_delete, "Delete", lambda: self.delete_habit())
             btn_delete_habit.grid(row=0, column=1, pady=10, padx=15)
 
             frm_delete.grid(row=9, columnspan=2, pady=10)
@@ -201,9 +200,9 @@ class HabitManagement(elems.HabitAppFrame):
 
         MainMenu(self.window, self.db_connect)
 
-    def delete_habit(self, habit_name):
+    def delete_habit(self):
 
-        habit_id = self.db_connect.find_habit_id(habit_name)
+        habit_id = self.db_connect.find_habit_id(self.selected_habit.get())
 
         if habit_id > 0:
             self.db_connect.delete_habit(habit_id)

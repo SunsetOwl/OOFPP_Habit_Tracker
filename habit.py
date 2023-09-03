@@ -98,3 +98,18 @@ class Habit:
 
         return self.db_connect.load_number_of_checks(self.habit_id)
 
+    def description_with_line_breaks(self):
+
+        output = ""
+        description_cut = self.description.split()
+
+        for word in description_cut:
+            if output == "":
+                output = word
+            elif len(output.splitlines()[-1]) + 1 + len(word) < 35:
+                output = output + " " + word
+            else:
+                output = output + "\n" + word
+
+        return output
+

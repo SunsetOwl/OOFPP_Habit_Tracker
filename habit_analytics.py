@@ -77,8 +77,36 @@ def current_streak_length(db_connect, habit_id):
 
     if not s.ongoing or not s.check_continues_streak(datetime.today()):
         return 0
-    else:
-        return s.length()
+
+    return s.length()
+
+
+def current_streak_start(db_connect, habit_id):
+    streaks = calculate_streaks(db_connect, habit_id)
+
+    if streaks == 0:
+        return "Not performed"
+
+    s = streaks[-1]
+
+    if not s.ongoing or not s.check_continues_streak(datetime.today()):
+        return "No ongoing streak"
+
+    return s.started.strftime("%d-%m-%Y")
+
+
+def longest_streak_dates(db_connect, habit_id):
+
+    streaks = calculate_streaks(db_connect, habit_id)
+
+    if streaks == 0:
+        return "Not performed", ""
+
+    streak_lengths = [s.length() for s in streaks]
+
+    i = streak_lengths.index(max(streak_lengths))
+
+    return streaks[i].started.strftime("%d-%m-%Y"), streaks[i].ended.strftime("%d-%m-%Y")
 
 
 def longest_streak_length(db_connect, habit_id):
@@ -93,8 +121,8 @@ def longest_streak_length(db_connect, habit_id):
 
     if streaks == 0:
         return 0
-    else:
-        streak_lengths = [s.length() for s in streaks]
+
+    streak_lengths = [s.length() for s in streaks]
 
     return max(streak_lengths)
 

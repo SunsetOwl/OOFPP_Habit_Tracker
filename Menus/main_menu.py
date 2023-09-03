@@ -66,22 +66,11 @@ class MainMenu(elems.HabitAppFrame):
             btn_next.grid(row=0, padx=15, column=1)
         frm_back_next.grid(row=6, pady=10, columnspan=3)
 
-        stats_text = "Longest streak(s) ever:"
-        for (habit_id, length) in hana.longest_streak_length_general(db_connect):
-            hab = Habit(db_connect)
-            hab.load_data(habit_id)
-            stats_text += "\n" + str(hab.name) + ": " + str(length)
-        stats_text += "\n\n Currently longest streak(s):"
-        for (habit_id, length) in hana.longest_streak_length_general(db_connect, True):
-            hab = Habit(db_connect)
-            hab.load_data(habit_id)
-            stats_text += "\n" + str(hab.name) + ": " + str(length)
-
-        lbl_stats = elems.HabitAppText(self, stats_text)
-        lbl_stats.grid(row=7, pady=10, padx=15, columnspan=3)
-
         btn_habit_management = elems.HabitAppButton(self, "Habit Management", lambda: self.habit_mgmt_button())
-        btn_habit_management.grid(row=8, pady=10, padx=15, columnspan=3)
+        btn_habit_management.grid(row=7, column=0, pady=20, padx=15, columnspan=2, sticky="w")
+
+        btn_insights = elems.HabitAppButton(self, "Stats", lambda: self.stats_button())
+        btn_insights.grid(row=7, column=2, pady=20, padx=15, sticky="e")
 
         self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
@@ -115,3 +104,11 @@ class MainMenu(elems.HabitAppFrame):
         self.destroy()
 
         HabitManagement(self.window, self.db_connect)
+
+    def stats_button(self):
+        from Menus.stats_menu import StatsMenu
+
+        self.grid_forget()
+        self.destroy()
+
+        StatsMenu(self.window, self.db_connect)
