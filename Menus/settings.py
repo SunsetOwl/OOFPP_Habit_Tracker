@@ -1,9 +1,14 @@
 class Settings:
+    """
+    This is a class containing settings for the application, so visual elements like colors or fonts can be changed
+    in a central location instead of spread out across the different UI elements.
+    """
 
     def __init__(self):
-        """Initialize the game's settings."""
+        """
+        Initializes the application's settings
+        """
 
-        # Color Settings
         self.colors = {"highlight": "#B6D274",
                        "background": "#F2E8CF",
                        "entry": "#F5F1E6",

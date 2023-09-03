@@ -82,6 +82,14 @@ def current_streak_length(db_connect, habit_id):
 
 
 def current_streak_start(db_connect, habit_id):
+    """
+    Fetches the date the current streak of the specified habit started on, if there is one,
+    and returns an appropriate response string.
+    :param db_connect: The Database Connector connected to the database.
+    :param habit_id: The id of the habit whose streak is being requested.
+    :return: A string containing either the required date or a note as to why no date could be fetched.
+    """
+
     streaks = calculate_streaks(db_connect, habit_id)
 
     if streaks == 0:
@@ -93,20 +101,6 @@ def current_streak_start(db_connect, habit_id):
         return "No ongoing streak"
 
     return s.started.strftime("%d-%m-%Y")
-
-
-def longest_streak_dates(db_connect, habit_id):
-
-    streaks = calculate_streaks(db_connect, habit_id)
-
-    if streaks == 0:
-        return "Not performed", ""
-
-    streak_lengths = [s.length() for s in streaks]
-
-    i = streak_lengths.index(max(streak_lengths))
-
-    return streaks[i].started.strftime("%d-%m-%Y"), streaks[i].ended.strftime("%d-%m-%Y")
 
 
 def longest_streak_length(db_connect, habit_id):
@@ -125,6 +119,27 @@ def longest_streak_length(db_connect, habit_id):
     streak_lengths = [s.length() for s in streaks]
 
     return max(streak_lengths)
+
+
+def longest_streak_dates(db_connect, habit_id):
+    """
+    Fetches the dates the longest streak of the specified habit started and ended on, if there is one,
+    and returns an appropriate response string.
+    :param db_connect: The Database Connector connected to the database.
+    :param habit_id: The id of the habit whose streak is being requested.
+    :return: A string containing either the required dates or a note as to why no date could be fetched.
+    """
+
+    streaks = calculate_streaks(db_connect, habit_id)
+
+    if streaks == 0:
+        return "Not performed", ""
+
+    streak_lengths = [s.length() for s in streaks]
+
+    i = streak_lengths.index(max(streak_lengths))
+
+    return streaks[i].started.strftime("%d-%m-%Y"), streaks[i].ended.strftime("%d-%m-%Y")
 
 
 def longest_streak_length_general(db_connect, current=False):

@@ -6,8 +6,18 @@ import Menus.standard_menu_elements as elems
 
 
 class HabitManagement(elems.HabitAppFrame):
+    """
+    This menu provides the user with functionalities to create and delete habits
+    as well as clearing the entire database, should they wish to return to a clean slate.
+    """
 
     def __init__(self, window, db_connect):
+        """
+        Initializes the habit management menu
+        :param window: The parent tkinter window
+        :param db_connect: The Database Connector connected to the database
+        """
+
         self.window = window
         self.db_connect = db_connect
 
@@ -15,10 +25,14 @@ class HabitManagement(elems.HabitAppFrame):
 
         self.pack()
 
+        # Title
+
         lbl_mm_title = elems.HabitAppTitle(self, "Habit Management")
         lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=2)
 
         habit_ids = db_connect.load_all_habit_ids()
+
+        # Preparation of the necessary variables for selection and input
 
         self.period_chosen = tk.StringVar()
         self.period_chosen.set("D")
@@ -28,6 +42,8 @@ class HabitManagement(elems.HabitAppFrame):
         self.new_name.set("")
         self.new_description = tk.StringVar()
         self.new_description.set("")
+
+        # Habit Creation
 
         lbl_add_habit = elems.HabitAppText(self, "To add a habit, \nfill in the following information:")
         lbl_add_habit.grid(row=1, pady=(10, 0), columnspan=2)
@@ -40,6 +56,8 @@ class HabitManagement(elems.HabitAppFrame):
         frm_name.grid(row=2, pady=(15, 0), columnspan=2)
 
         frm_period_choice = elems.HabitAppFrame(self)
+
+        # Habit Periodicity
 
         lbl_periodicity = elems.HabitAppText(frm_period_choice, "How often do\nyou want to\nperform\nthis habit?")
         lbl_periodicity.grid(row=0, column=0, padx=(10, 30))
@@ -72,6 +90,8 @@ class HabitManagement(elems.HabitAppFrame):
 
         frm_period_choice.grid(row=3, pady=(15, 0), columnspan=2)
 
+        # Habit Description
+
         lbl_description = elems.HabitAppText(self, "What does this habit entail?")
         lbl_description.grid(row=4, pady=(15, 0), columnspan=2)
         txt_description = elems.HabitAppEntry(self, 34, self.new_description)
@@ -79,6 +99,8 @@ class HabitManagement(elems.HabitAppFrame):
 
         btn_add_habit = elems.HabitAppButton(self, "Add Habit", lambda: self.add_habit_button())
         btn_add_habit.grid(row=6, columnspan=2, pady=(15, 0), padx=10)
+
+        # Habit Deletion, if at least one habit is in the database
 
         if len(habit_ids) > 0:
 
@@ -103,6 +125,8 @@ class HabitManagement(elems.HabitAppFrame):
 
             frm_delete.grid(row=9, columnspan=2, pady=10)
 
+        # Database reset and return buttons
+
         lbl_line2 = elems.HabitAppText(self, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         lbl_line2.grid(row=10, columnspan=2)
 
@@ -116,6 +140,12 @@ class HabitManagement(elems.HabitAppFrame):
         self.tkraise()
 
     def add_habit_button(self):
+        """
+        This buttons checks whether the user has provided all data needed to set up a habit in the database.
+        If all information is provided, the habit is added and the frame cleared.
+        """
+
+        # Checking input for obvious errors
 
         if self.new_name.get() == "":
             tk.messagebox.showerror("No Name", "You have not provided a name for your new habit.\n" +
@@ -146,6 +176,8 @@ class HabitManagement(elems.HabitAppFrame):
                                         "Please check your entry for any rogue characters.")
                 return
 
+        # Translate the chosen periodicity
+
         periodicity = 0
 
         match self.period_chosen.get():
@@ -162,10 +194,14 @@ class HabitManagement(elems.HabitAppFrame):
                     description=self.new_description.get()
                     )
 
+        # To avoid habit confusion the user can't add two of the same name to the database.
+
         if hab.name in hana.list_all_habits(self.db_connect):
             tk.messagebox.showerror("Duplicate Habit", "You already planted a habit of this name, " +
                                     "please choose a different name for your new habit.\n")
             return
+
+        # If everything has worked as intended, the habit is added to the database and the frame cleared.
 
         hab.new_habit()
 
@@ -175,6 +211,9 @@ class HabitManagement(elems.HabitAppFrame):
         HabitManagement(self.window, self.db_connect)
 
     def reset_database_button(self):
+        """
+        This buttons resets the entire database and sends the user back to the welcome screen.
+        """
 
         from Menus.welcome_screen import WelcomeScreen
 
@@ -186,6 +225,10 @@ class HabitManagement(elems.HabitAppFrame):
         WelcomeScreen(self.window, self.db_connect)
 
     def go_back_button(self):
+        """
+        If there is at least one habit set up, this button takes the user to the main menu from which all other
+        functions of the application can be accessed.
+        """
 
         if len(self.db_connect.load_all_habit_ids()) == 0:
             tk.messagebox.showerror("No Habits", "You haven't set up a habit yet,\n" +
@@ -201,6 +244,10 @@ class HabitManagement(elems.HabitAppFrame):
         MainMenu(self.window, self.db_connect)
 
     def delete_habit(self):
+        """
+        If the user has selected a habit in the dropdown menu, the habit is removed from the database
+        and the frame reloaded to now no longer include the habit.
+        """
 
         habit_id = self.db_connect.find_habit_id(self.selected_habit.get())
 

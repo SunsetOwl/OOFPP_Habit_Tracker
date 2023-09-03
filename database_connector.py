@@ -273,18 +273,3 @@ class DatabaseConnector:
         query = "SELECT COUNT(*) FROM checks WHERE habit_id=?"
         check_count = self.cur.execute(query, (habit_id,)).fetchall()[0][0]
         return check_count
-
-    def print_habits(self):
-
-        query = "SELECT * FROM habits"
-        all_habit_data = self.cur.execute(query).fetchall()
-        for data in all_habit_data:
-            print(data)
-
-    def print_checks(self):
-
-        query = "SELECT * FROM checks"
-        all_check_data = self.cur.execute(query).fetchall()
-        for data in all_check_data:
-            print(data)
-

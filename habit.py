@@ -99,6 +99,10 @@ class Habit:
         return self.db_connect.load_number_of_checks(self.habit_id)
 
     def description_with_line_breaks(self):
+        """
+        Fetches the description of the habit with more easily displayable line breaks.
+        :return: The broken up description string.
+        """
 
         output = ""
         description_cut = self.description.split()
