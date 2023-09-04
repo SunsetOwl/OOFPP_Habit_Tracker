@@ -74,8 +74,8 @@ class Habit:
         self.db_connect.save_check(self.habit_id, check_data)
         state = "Saved"
 
-        today = datetime.today().replace(hour=0, minute=0, second=0)
-        latest_day = latest_check.replace(hour=0, minute=0, second=0)
+        today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        latest_day = latest_check.replace(hour=0, minute=0, second=0, microsecond=0)
         
         if (today - latest_day).days == 0:
             state = "Too Early"
