@@ -7,7 +7,7 @@ from Menus.settings import Settings
 settings = Settings()
 
 window = tk.Tk()
-window.title("Habit Tracker")
+window.title("Grow Your Habits")
 window.configure(background=settings.colors["background"])
 window.minsize(400, 500)
 window.maxsize(400, 700)

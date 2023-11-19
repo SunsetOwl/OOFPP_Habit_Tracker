@@ -16,7 +16,7 @@ class WelcomeScreen(elems.HabitAppFrame):
 
         lbl_intro = elems.HabitAppText(
             master=self,
-            text="This is Grow Your Habits\nWhere we nurture our goals\nuntil they grow into healthy\nhabit plants!\n\n"
+            text="This is Grow Your Habits\nwhere we nurture our goals\nuntil they grow into healthy\nhabit plants!\n\n"
                  "It looks like this is\nyour first time with us.\n\n"
                  "Would you like to visit\na pre-grown garden to see\nwhere the journey can go?\n\n"
                  "Or do you want to start\nright away and plant\nyour own garden?"

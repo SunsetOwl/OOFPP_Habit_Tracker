@@ -116,4 +116,3 @@ class Habit:
                 output = output + "\n" + word
 
         return output
-

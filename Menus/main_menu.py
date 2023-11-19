@@ -15,7 +15,7 @@ class MainMenu(elems.HabitAppFrame):
         self.grid_columnconfigure(0, minsize=200)
         self.grid_columnconfigure(1, minsize=40)
 
-        lbl_mm_title = elems.HabitAppTitle(self, "~ Your Patch ~")
+        lbl_mm_title = elems.HabitAppTitle(self, "~ Your Garden ~")
         lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=3)
 
         habit_list = hana.list_all_habits(db_connect)
