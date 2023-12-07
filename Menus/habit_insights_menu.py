@@ -9,7 +9,7 @@ class HabitInsightsMenu(elems.HabitAppFrame):
      - The general habit information stored in the database like name, periodicity etc.
      - How often the habit has been performed overall
      - The current and longest streaks
-     - The consistency within selected timeframes
+     - The user's consistency within the past 4 weeks
     """
 
     def __init__(self, window, db_connect, habit_id):
@@ -62,6 +62,14 @@ class HabitInsightsMenu(elems.HabitAppFrame):
             insights_text = insights_text + hana.longest_streak_dates(self.db_connect, self.hab.habit_id)[0] + "\n"
             insights_text = insights_text + "Last Day: "
             insights_text = insights_text + hana.longest_streak_dates(self.db_connect, self.hab.habit_id)[1] + "\n"
+        insights_text = insights_text + "\n"
+
+        # Consistency
+
+        insights_text = insights_text + "Within the past 4 weeks you\nhave watered this plant\n"
+        insights_text = insights_text + str(hana.consistency(self.db_connect, self.hab.habit_id, 28)[0])
+        insights_text = insights_text + " out of "
+        insights_text = insights_text + str(hana.consistency(self.db_connect, self.hab.habit_id, 28)[1]) + " times.\n"
 
         # Adding the collected information to the frame
 
