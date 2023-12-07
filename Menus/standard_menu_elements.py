@@ -1,5 +1,6 @@
 import tkinter as tk
 from Menus.settings import Settings
+from PIL import ImageTk, Image
 
 settings = Settings()
 
@@ -29,7 +30,7 @@ class HabitAppText(tk.Label):
                           text=text,
                           foreground=settings.colors["dark"],
                           background=settings.colors["background"],
-                          font=(settings.font, 13),
+                          font=(settings.font, 14),
                           )
 
 
@@ -88,3 +89,24 @@ class HabitAppFrame(tk.Frame):
 
     def __init__(self, master):
         tk.Frame.__init__(self, master=master, background=settings.colors["background"])
+
+
+class HabitPlant(tk.Label):
+
+    def __init__(self, master, days):
+
+        if days == 0:
+            self.img_link = "Icons/0.png"
+        elif days < 7:
+            self.img_link = "Icons/1.png"
+        elif days < 14:
+            self.img_link = "Icons/7.png"
+        elif days < 21:
+            self.img_link = "Icons/14.png"
+        elif days < 28:
+            self.img_link = "Icons/21.png"
+        else:
+            self.img_link = "Icons/28.png"
+
+        self.img = ImageTk.PhotoImage(Image.open(self.img_link))
+        tk.Label.__init__(self, master=master, image=self.img, background=settings.colors["background"])

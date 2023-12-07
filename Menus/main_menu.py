@@ -16,7 +16,7 @@ class MainMenu(elems.HabitAppFrame):
         self.grid_columnconfigure(1, minsize=40)
 
         lbl_mm_title = elems.HabitAppTitle(self, "~ Your Garden ~")
-        lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=3)
+        lbl_mm_title.grid(row=0, pady=10, padx=15, columnspan=4)
 
         habit_list = hana.list_all_habits(db_connect)
         habit_ids = db_connect.load_all_habit_ids()
@@ -38,10 +38,12 @@ class MainMenu(elems.HabitAppFrame):
         habit_labels = []
         streak_labels = []
         perform_buttons = []
+        plant_icons = []
 
         row = 1
 
         for i in page_list:
+
             habit_labels.append(elems.HabitAppText(self, habit_list[i]))
             habit_labels[row-1].grid(row=row, pady=10, padx=10, column=0)
 
@@ -49,9 +51,12 @@ class MainMenu(elems.HabitAppFrame):
             streak_labels.append(elems.HabitAppText(self, streak_label))
             streak_labels[row-1].grid(row=row, pady=10, padx=10, column=1)
 
+            plant_icons.append(elems.HabitPlant(self, hana.current_streak_length(db_connect, habit_ids[i])))
+            plant_icons[row - 1].grid(row=row, pady=10, padx=10, column=2)
+
             perform_buttons.append(elems.HabitAppButton(self, "Water",
                                                         lambda i=i: self.perform_habit_button(habit_ids[i])))
-            perform_buttons[row-1].grid(row=row, pady=5, padx=10, column=2)
+            perform_buttons[row-1].grid(row=row, pady=5, padx=10, column=3)
 
             row += 1
 
@@ -60,17 +65,17 @@ class MainMenu(elems.HabitAppFrame):
 
         if page > 0:
             btn_previous = elems.HabitAppButton(frm_back_next, "<", lambda: self.previous_page())
-            btn_previous.grid(row=0, padx=15, column=0)
+            btn_previous.grid(row=0, padx=15, column=1)
         if len(habit_list) > page_list[-1]+1:
             btn_next = elems.HabitAppButton(frm_back_next, ">", lambda: self.next_page())
-            btn_next.grid(row=0, padx=15, column=1)
-        frm_back_next.grid(row=6, pady=10, columnspan=3)
+            btn_next.grid(row=0, padx=15, column=2)
+        frm_back_next.grid(row=6, pady=10, columnspan=4)
 
         btn_habit_management = elems.HabitAppButton(self, "Habit Management", lambda: self.habit_mgmt_button())
-        btn_habit_management.grid(row=7, column=0, pady=20, padx=15, columnspan=2, sticky="w")
+        btn_habit_management.grid(row=7, column=0, pady=20, padx=15, columnspan=3, sticky="w")
 
         btn_insights = elems.HabitAppButton(self, "Stats", lambda: self.stats_button())
-        btn_insights.grid(row=7, column=2, pady=20, padx=15, sticky="e")
+        btn_insights.grid(row=7, column=3, pady=20, padx=15, sticky="e")
 
         self.window.eval('tk::PlaceWindow . center')
         self.tkraise()
