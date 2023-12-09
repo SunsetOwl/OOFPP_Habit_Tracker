@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2fbd0db2-e2c8-4765-8a06-ea3ab40d8c23" name="Changes" comment="Updated the readme with some screenshots of the application in use." />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="924ea29b-3029-4df8-978a-eab923f0b94d" />
+        <option name="url" value="https://github.com/SunsetOwl/OOFPP_Habit_Tracker.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2SA9tOH4TrpEgLdY3bDsWVOuw90" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Data Science\OneDrive - IU International University of Applied Sciences\OOFPP\HabitTracker\Database" />
+      <recent name="D:\Data Science\OneDrive - IU International University of Applied Sciences\OOFPP\HabitTracker\Screenshots" />
+      <recent name="D:\Data Science\OneDrive - IU International University of Applied Sciences\OOFPP\HabitTracker" />
+      <recent name="D:\Data Science\OneDrive - IU International University of Applied Sciences\OOFPP\HabitTracker\Menus" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python tests.Python tests for test_suite.TestHabit">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HabitTracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\RedSc\AppData\Local\Programs\Python\Python311\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="menu" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="HabitTracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/menu.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test_suite" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="HabitTracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\RedSc\AppData\Local\Programs\Python\Python311\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_suite.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_suite.TestHabit" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="HabitTracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\RedSc\AppData\Local\Programs\Python\Python311\python.exe" />
+      <option name="SDK_NAME" value="Python 3.11" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_suite.TestHabit&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_suite.TestHabit.test_perform_a_habit_at_that_has_been_performed_before_today_then_return_too_early" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="HabitTracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_suite.TestHabit.test_perform_a_habit_at_that_has_been_performed_before_today_then_return_too_early&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_suite.TestHabit.test_when_habit_added_then_habit_loadable_from_database" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="HabitTracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_suite.TestHabit.test_when_habit_added_then_habit_loadable_from_database&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.menu" />
+      <item itemvalue="Python.main" />
+      <item itemvalue="Python.test_suite" />
+      <item itemvalue="Python tests.Python tests for test_suite.TestHabit" />
+      <item itemvalue="Python tests.Python tests for test_suite.TestHabit.test_perform_a_habit_at_that_has_been_performed_before_today_then_return_too_early" />
+      <item itemvalue="Python tests.Python tests for test_suite.TestHabit.test_when_habit_added_then_habit_loadable_from_database" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests for test_suite.TestHabit" />
+        <item itemvalue="Python.test_suite" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python tests.Python tests for test_suite.TestHabit.test_perform_a_habit_at_that_has_been_performed_before_today_then_return_too_early" />
+        <item itemvalue="Python tests.Python tests for test_suite.TestHabit.test_when_habit_added_then_habit_loadable_from_database" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2fbd0db2-e2c8-4765-8a06-ea3ab40d8c23" name="Changes" comment="" />
+      <created>1688578731866</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1688578731866</updated>
+      <workItem from="1688578762558" duration="29930000" />
+      <workItem from="1688664379621" duration="37000" />
+      <workItem from="1689937397269" duration="451000" />
+      <workItem from="1693233941226" duration="3408000" />
+      <workItem from="1693843214425" duration="202000" />
+      <workItem from="1693843465365" duration="3177000" />
+      <workItem from="1695921923555" duration="151000" />
+      <workItem from="1695922689054" duration="30000" />
+      <workItem from="1697052296594" duration="257000" />
+      <workItem from="1697467245716" duration="94000" />
+      <workItem from="1700408010444" duration="4070000" />
+      <workItem from="1701945590989" duration="13135000" />
+      <workItem from="1702119259040" duration="5141000" />
+      <workItem from="1702124539809" duration="433000" />
+    </task>
+    <task id="LOCAL-00001" summary="First Commit, includes connection to database, base habit class and first functions for marking a habit as checked for the day.">
+      <option name="closed" value="true" />
+      <created>1688647004194</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1688647004194</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Latest_check function edited to be functional and test_suite.py added to start implementation of unittests, rather than finding out later that the program isn't testable.">
+      <option name="closed" value="true" />
+      <created>1688652420034</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1688652420034</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added to the readme, removed list of requirements from habit analytics and failed to fix one of the tests in the test_suite.">
+      <option name="closed" value="true" />
+      <created>1693237366493</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1693237366493</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixed one test that kept failing on tower PC and changed the tests to use some fixtures.">
+      <option name="closed" value="true" />
+      <created>1693852773237</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1693852773237</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Grammar errors and consistent terms">
+      <option name="closed" value="true" />
+      <created>1700415160063</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700415160063</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added Plant icons">
+      <option name="closed" value="true" />
+      <created>1701962938289</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1701962938289</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Enlarged the plant icons and added lots of documentation and an extended user manual in the readme">
+      <option name="closed" value="true" />
+      <created>1701990666725</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1701990666725</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Updated the readme with some screenshots of the application in use.">
+      <option name="closed" value="true" />
+      <created>1702123525068</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702123525068</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First Commit, includes connection to database, base habit class and first functions for marking a habit as checked for the day." />
+    <MESSAGE value="Latest_check function edited to be functional and test_suite.py added to start implementation of unittests, rather than finding out later that the program isn't testable." />
+    <MESSAGE value="Added to the readme, removed list of requirements from habit analytics and failed to fix one of the tests in the test_suite." />
+    <MESSAGE value="Fixed one test that kept failing on tower PC and changed the tests to use some fixtures." />
+    <MESSAGE value="Grammar errors and consistent terms" />
+    <MESSAGE value="Added Plant icons" />
+    <MESSAGE value="Enlarged the plant icons and added lots of documentation and an extended user manual in the readme" />
+    <MESSAGE value="Updated the readme with some screenshots of the application in use." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated the readme with some screenshots of the application in use." />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/HabitTracker$main.coverage" NAME="main Coverage Results" MODIFIED="1702123150778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/HabitTracker$menu.coverage" NAME="menu Coverage Results" MODIFIED="1688633896158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/HabitTracker$.coverage" NAME=" Coverage Results" MODIFIED="1702124070857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
